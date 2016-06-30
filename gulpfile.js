@@ -15,8 +15,9 @@ var gulp = require('gulp'),
 	pug = require('gulp-pug'),
 
 	//images
-	// imagemin = require('gulp-imagemin'),
-	// cache = require('gulp-cache'),
+	imagemin = require('gulp-imagemin'),
+	cache = require('gulp-cache'),
+	svgo = require('gulp-svgo'),
 
 	//other
 	bsync = require('browser-sync').create(),
@@ -28,12 +29,12 @@ var gulp = require('gulp'),
 
 
 gulp.task('styles', function(){
-	return gulp.src('src/scss/*.scss')
+	return gulp.src(['src/scss/fonts/imported.css', 'src/scss/fonts/*.css', 'src/scss/reset.css', 'src/scss/*.css', 'src/scss/*.scss'])
 		.pipe(newer('dist/*.css'))
+		.pipe(concat('style.scss'))					// concat to one file
 		.pipe(sass())											// convert sass to css
 		// .pipe(csslint())									// check for errors
   //   .pipe(csslint.reporter())											
-		.pipe(concat('style.css'))					// concat to one file
 		.pipe(gulp.dest('.temp'))
 		// .pipe(uncss('index.html'))				// remove unused css
 		.pipe(autoprefixer())							// add prefixes
@@ -43,14 +44,13 @@ gulp.task('styles', function(){
 });
 
 gulp.task('scripts', function(){
-	var plugins =	gulp.src(['src/js/jquery.js', 'src/js/plugins/*.js'])
-			.pipe(newer('.temp/plugins.js'))
+	var plugins =	gulp.src(['src/js/plugins/*.js', '!src/js/plugins/_*.js'])
+			// .pipe(newer('.temp/plugins.js'))
 			.pipe(concat('plugins.js'));
 
-	var main = gulp.src(['src/js/main/*.js'])
-			.pipe(newer('.temp/main.js'))
+	var main = gulp.src(['src/js/main/*.js', '!src/js/main/_*.js'])
+			// .pipe(newer('.temp/main.js'))
 			.pipe(concat('main.js'))
-			.pipe(jquery());
 
 	var merged = merge(plugins, main)
 		.pipe(concat('script.js'))					
@@ -73,16 +73,19 @@ gulp.task('views', function(){
 		.pipe(bsync.reload({ stream: true }))
 });
 
-// gulp.task('images', function(){
-//   return gulp.src('src/img/**/*.+(png|jpg|gif|svg)')
-// 	  .pipe(cache(imagemin({ interlaced: true })))
-// 	  .pipe(gulp.dest('dist/images'))
-// });
+gulp.task('images', function(){
+  return gulp.src('src/img/**/*.+(png|jpg|jpeg|gif|svg)')
+	  .pipe(cache(imagemin({ interlaced: true })))
+	  .pipe(svgo())
+	  .pipe(gulp.dest('dist/img'))
+	  .pipe(bsync.reload({ stream: true }))
+});
 
 gulp.task('watch', function(){
-	gulp.watch('src/scss/*.scss', ['styles']);
-	gulp.watch('src/views/*.pug', ['views']);
-	gulp.watch('src/js/*.js', ['scripts']);
+	gulp.watch('src/scss/*', ['styles']);
+	gulp.watch('src/views/*', ['views']);
+	gulp.watch('src/js/**/*', ['scripts']);
+	gulp.watch('src/img/*', ['images']);
 });
 
 gulp.task('clean', function() {
@@ -91,7 +94,7 @@ gulp.task('clean', function() {
 
 gulp.task('build', function (callback) {
   runSequence('clean', 
-    ['styles', 'views', 'scripts'],
+    ['styles', 'views', 'scripts', 'images'],
     callback
   )
 })

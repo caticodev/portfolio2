@@ -1,1 +1,58 @@
-$process-bg: #002F2F;
+$deep-teal: #002F2F;
+$loulou: #2e0927;
+$edward: #AAAFAF;
+$cream: #FFFFCB;
+$chateau-green: #3EAE68;
+$red: red;
+//
+
+$bg: $deep-teal;
+$text: $edward;
+$hover: $chateau-green;
+$h2: $chateau-green;
+//
+
+$input-bg: $bg;
+$input-text: $text;
+
+$section-left: $bg;
+// $section-right: linear-gradient(left, rgb(243, 239, 21) 0%,rgb(0, 152, 133) 100%);
+$section-right: $chateau-green;
+$section-left-title: darken($section-left, 0.4%);
+$section-right-title: $hover;
+
+$intro-bg: $bg;
+$intro-text: $text;
+$intro-border: $text;
+
+$menu-bg: lighten($text, 15);
+$menu-hover: lighten($text, 30);
+$menu-active: $hover;
+$menu-text: $bg;
+$menu-active-text: $bg;
+
+$proj-bg: $bg;
+$proj-text: $text;
+$proj-border: rgba($proj-text, .5);
+$proj-overlay: rgba($proj-bg, .9);
+$proj-link: $hover;
+$proj-title: $hover;
+
+$skill-col: $bg;
+$skill-shadow: $red;
+$skill-title: $hover;
+
+$contact-bg: $bg;
+$contact-title: $h2;
+$contact-text: $text;
+$contact-hover: $hover;
+$contact-border: $text;
+
+$icon-hover: lighten($text, 30);
+$icon-fill: $hover;
+$icon-text: $text;
+$icon-bg: rgba($text, 0.1);
+
+$skew: 20;
+
+$mobile: 700px;

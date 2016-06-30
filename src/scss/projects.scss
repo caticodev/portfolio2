@@ -1,0 +1,236 @@
+.proj{
+	background-color: $proj-bg;
+	position: relative;
+	font-size: 0;
+
+	&_img{
+		object-fit: cover;
+		height: 100%; 
+		width: 100%;
+	}
+
+	&_title, &_descr, &_link, &_tags{
+		color: $proj-text;
+		font-size: 18px;
+	}
+
+	&_title{
+		font-weight: 200;
+		font-size: 30px;
+		text-align: center;
+		padding-bottom: 5%;
+		border-bottom: 1px solid $proj-border;
+		margin-bottom: 5%;
+		width: 80%;
+	}
+
+	&_descr{
+		font-weight: 300;
+		line-height: 1.5;
+		width: 80%;
+	}
+
+	&_tags{
+		line-height: 1.5;
+		position: absolute;
+		bottom: 10%;
+		width: 70%;
+	}
+
+	&_links{
+		position: absolute;
+		right: 0;
+		bottom: 20%;
+		z-index: 10;
+		overflow: hidden;
+	}
+
+	&_link{
+		background-color: $proj-link;
+		color: $proj-bg;
+		display: block;
+		text-decoration: none;
+		margin-bottom: 10px;
+		padding: 5px 10px;
+		border-radius: 20px 0 0 20px;
+		transform: translateX(90px); 
+		transition: transform .3s;
+
+		svg{
+			width: 25px;
+			height: 25px;
+			fill: $proj-bg;
+			vertical-align: middle;
+			margin-right: 10px;
+			stroke-dasharray: 100;
+			// stroke-dashoffset: 100;
+		}
+
+		span{
+			vertical-align: middle;
+		}
+
+		&:hover{
+			transform: none;
+		}
+	}
+
+	&_list{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+
+	li{
+		display: inline-block;
+		vertical-align: top;
+		position: relative;
+		overflow: hidden;
+		width: 33.33%;
+		height: 50%;
+		perspective: 400px;
+		// display: none;
+	}
+
+
+	&_overlay {
+		transform: rotate3d(-1, 0, 0, 90deg);
+		width: 100%;
+		height: 100%;
+		padding: 10%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		// pointer-events: none;
+		background-color: $proj-overlay;
+		z-index: 10;
+	}
+}
+
+.in-top .proj_overlay {
+	transform-origin: 50% 0%;
+	animation: in-top 300ms ease 0ms 1 forwards;
+}
+
+.in-right .proj_overlay {
+	transform-origin: 100% 0%;
+	animation: in-right 300ms ease 0ms 1 forwards;
+}
+
+.in-bottom .proj_overlay {
+	transform-origin: 50% 100%;
+	animation: in-bottom 300ms ease 0ms 1 forwards;
+}
+
+.in-left .proj_overlay {
+	transform-origin: 0% 0%;
+	animation: in-left 300ms ease 0ms 1 forwards;
+}
+
+.out-top .proj_overlay {
+	transform-origin: 50% 0%;
+	animation: out-top 300ms ease 0ms 1 forwards;
+}
+
+.out-right .proj_overlay {
+	transform-origin: 100% 50%;
+	animation: out-right 300ms ease 0ms 1 forwards;
+}
+
+.out-bottom .proj_overlay {
+	transform-origin: 50% 100%;
+	animation: out-bottom 300ms ease 0ms 1 forwards;
+}
+
+.out-left .proj_overlay {
+	transform-origin: 0% 0%;
+	animation: out-left 300ms ease 0ms 1 forwards;
+}
+
+@keyframes in-top {
+	from {
+		transform: rotate3d(-1, 0, 0, 90deg);
+	}
+	to {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+}
+@keyframes in-right {
+	from {
+		transform: rotate3d(0, -1, 0, 90deg);
+	}
+	to {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+}
+@keyframes in-bottom {
+	from {
+		transform: rotate3d(1, 0, 0, 90deg);
+	}
+	to {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+}
+@keyframes in-left {
+	from {
+		transform: rotate3d(0, 1, 0, 90deg);
+	}
+	to {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+}
+@keyframes out-top {
+	from {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+	to {
+		transform: rotate3d(-1, 0, 0, 130deg);
+	}
+}
+@keyframes out-right {
+	from {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+	to {
+		transform: rotate3d(0, -1, 0, 130deg);
+	}
+}
+@keyframes out-bottom {
+	from {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+	to {
+		transform: rotate3d(1, 0, 0, 130deg);
+	}
+}
+@keyframes out-left {
+	from {
+		transform: rotate3d(0, 0, 0, 0deg);
+	}
+	to {
+		transform: rotate3d(0, 1, 0, 130deg);
+	}
+}
+
+@media (max-width: $mobile){
+	.proj{
+
+		&_list{
+			height: auto;
+			position: static;
+		}
+
+		li{
+			width: 100%;
+			height: 300px;
+			position: static;
+		}
+
+		&_title,
+		&_descr{
+			width: 100%;
+		}
+	}
+}

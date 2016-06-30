@@ -1,0 +1,140 @@
+$menu-size: 60px;
+$item-size: $menu-size - 20px;
+
+.menu{
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	
+	&_wrapper{
+		position: relative;
+		z-index: 2;
+		transform: rotate(90deg);
+	  height: 60px;
+	  width: 60px;
+	  filter: url(#goo);
+	}
+
+  &_opener,
+  &_btn{
+  	position: absolute;
+	  left: 50%;
+	  top: 50%;
+	  border-radius: 50%;
+	  width: $menu-size;
+	  height: $menu-size;
+	  text-align: center;
+	  border: none;
+	  outline: none;
+	  margin-left: -$menu-size/2;
+  	margin-top: -$menu-size/2;
+  }
+
+  &_btn{
+	  background: $menu-bg;
+	  transition: background .3s ease;
+
+	  &:hover{
+	  	background: $menu-hover;
+	  }
+  }
+
+  &_opener{
+  	z-index: 9;
+  }
+
+  &_item.active{
+  	
+  	.menu_btn{
+  		background: $menu-active;
+      cursor: normal;
+
+  		svg path{
+  			fill: $menu-active-text;
+  		}
+  	}
+  }
+
+  &_icon{
+  	width: $item-size;
+	  height: $item-size;
+	  display: inline-block;
+	  transform: rotate(-90deg);
+	  margin-top: 10px;
+
+	  svg{
+	  	width: 100%;
+	  	height: 100%;
+	  }
+  }
+
+  &_main{
+	  transform: rotate(-90deg);
+  }
+
+  &_burger{
+  	position: relative;
+  	width: $item-size;
+  	height: $item-size;
+  	// padding: 22px;
+  	// margin-top: -15px;
+  	margin: 0 auto;
+
+	  span,
+  	&:before,
+  	&:after{
+  		content: '';
+  		display: inline-block;
+  		width: $item-size;
+  		height: 2px;
+  		position: absolute;
+  		background-color: $menu-text;
+  		transition: transform .3s ease, opacity .3s ease;
+  	}
+
+  	span{
+  		width: 4px;
+  		left: $item-size/2 - 2px;
+  		margin-top: $item-size/2 - 1px;
+  	}
+
+  	&:before{
+  		top: $item-size/4;
+  		left: 0;
+  	}
+
+  	&:after{
+  		bottom: $item-size/4;
+  		left: 0;
+  	}
+  }
+
+  &.open{
+    right: -300px;
+
+    .menu_wrapper{
+      width: 700px;
+    }
+
+  	.menu_burger{
+
+  		span{
+  			opacity: 0;
+  		}
+
+  		&:before,
+  		&:after{
+  			transform-origin: 7px center;
+  			left: 4px;
+  		}
+
+  		&:before{
+  			transform: rotate(45deg);
+  		}
+
+  		&:after{
+  			transform: rotate(-45deg);
+  		}
+  	}
+  }
+}

@@ -1,0 +1,44 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html, body, .wrapper{
+	height: 100%;
+}
+
+body{
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Raleway';
+	overflow-x: hidden;
+}
+
+.wrapper{
+	overflow: hidden;
+}
+
+.main{
+	height: 100%;
+	position: relative;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 50px $input-bg inset; /* Change the color to your own background color */
+  -webkit-text-fill-color: $input-text;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 50px $input-bg inset;
+  -webkit-text-fill-color: $input-text;
+} 
+
+@media (max-width: $mobile){
+	.wrapper{
+		overflow: auto;
+	}
+
+	body{
+		font-size: 80%;
+	}
+}

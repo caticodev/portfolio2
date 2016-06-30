@@ -1,0 +1,100 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width,initial-scale=1")
+		title Catico
+		link(rel="stylesheet", type="text/css", href="style.css")
+	body
+		- var imgpath = "img/"
+		- var projectPath = "img/projects/"
+		.wrapper
+			main.main
+				//- .overlay.sec1
+				//- .overlay.sec2
+				//- .overlay.sec3
+				//- .overlay.sec4 
+				section.section.intro
+					h1 Catico
+				section.section.proj
+					ul.proj_list
+						- for(var i=1; i<13; i++)
+							li
+								img.proj_img(src=projectPath+"pic"+i+".jpeg")
+								.proj_overlay
+									.proj_title Project XYZ
+									.proj_descr This is very nice project. I have been working on this project for a very long time. It is amazing. Having many great features and various effects.
+									.proj_links
+									.proj_tags #html #css
+				section.section
+					.section_left
+					.section_top
+						h2.section_bgtitle.section_bgtitle__process Creative process
+						.process
+							.process_el
+								.process_icon.bulb
+								h3.process_title Think
+								.process_line
+									svg(width="200", height="200")
+										line(x1="0", y1="0", x2="600", y2="0")
+							.process_el
+								.process_icon.pen
+								h3.process_title Design
+							.process_el
+								.process_icon.brush
+								h3.process_title Engineer
+							.process_el
+								.process_icon.globe
+								h3.process_title Develop
+					.section_right
+						h2.section_bgtitle.section_bgtitle__skills Skills
+						ul#icons
+							//- li.layer.small.shadow(data-depth="0.20")
+							//- 	img.layer_icon.small_icon(src="img/d3js-original.svg")
+							//- 	img.layer_icon.small_icon(src="img/grunt-original-wordmark.svg")
+							//- 	img.layer_icon.small_icon(src="img/photoshop.jpg")
+							//- 	img.layer_icon.small_icon(src="img/mysql-original-wordmark.svg")
+							//- 	img.layer_icon.small_icon(src="img/rails-plain-wordmark.svg")
+							//- 	img.layer_icon.small_icon(src="img/ruby-original-wordmark.svg")
+							//- li.layer.medium.shadow(data-depth="0.50")
+							//- 	img.layer_icon.medium_icon(src="img/bootstrap-plain-wordmark.svg")
+							//- 	img.layer_icon.medium_icon(src="img/heroku-original-wordmark.svg")
+							//- 	img.layer_icon.medium_icon(src="img/less-plain-wordmark.svg")
+							//- 	img.layer_icon.medium_icon(src="img/nodejs-original-wordmark.svg")
+							//- 	img.layer_icon.medium_icon(src="img/sass-original.svg")
+							//- 	img.layer_icon.medium_icon(src="img/mongodb-original-wordmark.svg")
+							//- 	img.layer_icon.medium_icon(src="img/react-original-wordmark.svg")
+							//- li.layer.large.shadow(data-depth="0.90")
+							//- 	img.layer_icon.large_icon(src="img/html5-original-wordmark.svg")
+							//- 	img.layer_icon.large_icon(src="img/css3-original-wordmark.svg")
+							//- 	img.layer_icon.large_icon(src="img/javascript-original.svg")
+							//- 	img.layer_icon.large_icon(src="img/jquery-original-wordmark.svg")
+							//- 	img.layer_icon.large_icon(src="img/git-original-wordmark.svg")
+							//- 	img.layer_icon.large_icon(src="img/github-original-wordmark.svg")
+							//- 	img.layer_icon.large_icon(src="img/bitbucket-original-wordmark.svg")
+							li.layer.small(data-depth="0.30")
+								img.layer_icon.small_icon(src=imgpath+"d3js-original.svg")
+								img.layer_icon.small_icon(src=imgpath+"grunt-original-wordmark.svg")
+								img.layer_icon.small_icon(src=imgpath+"photoshop.jpg")
+								img.layer_icon.small_icon(src=imgpath+"mysql-original-wordmark.svg")
+								img.layer_icon.small_icon(src=imgpath+"rails-plain-wordmark.svg")
+								img.layer_icon.small_icon(src=imgpath+"ruby-original-wordmark.svg")
+							li.layer.medium(data-depth="0.60")
+								img.layer_icon.medium_icon(src=imgpath+"bootstrap-plain-wordmark.svg")
+								img.layer_icon.medium_icon(src=imgpath+"heroku-original-wordmark.svg")
+								img.layer_icon.medium_icon(src=imgpath+"less-plain-wordmark.svg")
+								img.layer_icon.medium_icon(src=imgpath+"nodejs-original-wordmark.svg")
+								img.layer_icon.medium_icon(src=imgpath+"sass-original.svg")
+								img.layer_icon.medium_icon(src=imgpath+"mongodb-original-wordmark.svg")
+								img.layer_icon.medium_icon(src=imgpath+"react-original-wordmark.svg")
+							li.layer.large(data-depth="1.00")
+								img.layer_icon.large_icon(src=imgpath+"html5-original-wordmark.svg")
+								img.layer_icon.large_icon(src=imgpath+"css3-original-wordmark.svg")
+								img.layer_icon.large_icon(src=imgpath+"javascript-original.svg")
+								img.layer_icon.large_icon(src=imgpath+"jquery-original-wordmark.svg")
+								img.layer_icon.large_icon(src=imgpath+"git-original-wordmark.svg")
+								img.layer_icon.large_icon(src=imgpath+"github-original-wordmark.svg")
+								img.layer_icon.large_icon(src=imgpath+"bitbucket-original-wordmark.svg")
+				section.section
+					h1 Contact
+		script(src="script.js")

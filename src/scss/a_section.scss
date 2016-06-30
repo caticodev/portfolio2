@@ -1,0 +1,79 @@
+.section{
+	height: 100%;
+	font-size: 0;
+	position: relative;
+
+	&_left,
+	&_right,
+	&_top{
+		height: 100%;
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	&_left{
+		background-color: $section-left;
+		width: 30%;
+	}
+
+	&_right{
+		background: $section-right;
+		// background-color: $green;
+		width: 70%;
+		text-align: right;
+	}
+
+	&_top{
+		background-color: $section-left;
+		transform: skewX(-#{$skew}deg);
+		position: absolute;
+		width: 50%;
+		left: 0;
+		top: 0;
+	}
+
+	&_bgtitle{
+		font-family: 'Wire One';
+		font-size: 300px;
+		text-transform: uppercase;
+		position: absolute;
+		z-index: -1;
+		overflow: hidden;
+
+		&__process{
+			color: $section-left-title;
+			transform: skewX(#{$skew}deg);
+			top: 0;
+			left: 0;
+		}
+
+		&__skills{
+			color: $section-right-title;
+			// color: transparent;
+			transform: rotate(90deg);
+			z-index: 0;
+			top: 25%;
+			right: -7%;
+		}
+	}
+}
+
+@media (max-width: $mobile){
+	.section{
+		min-height: 100%;
+		height: auto;
+
+		&_left,
+		&_right{
+			width: 100%;
+			min-height: 100vh;
+		}
+
+		&_top{
+			width: 100%;
+			height: 100vw;
+			top: 5%;
+			transform: skew(00deg, 10deg);
+		}
+	}
+}

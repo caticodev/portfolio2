@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 208" id="catico" height="200" enable-background="new 0 0 250 250">
+  <defs>
+    <linearGradient id="g443" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop stop-color="#000" offset="0"/><stop stop-color="#fff" offset="0.5"/><stop stop-color="#000" offset="1"/>
+		</linearGradient>
+		<filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
+      <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+    </filter>
+	</defs>	
+	<g class="content" transform="translate(-3.1216108,-2.3839405)">
+		<g class="left" transform="translate(-6.6167612,-8.7829805)">
+			<g class="shape"><path class="black" d="M 39.085087,11.166921 83.565758,68.149559 110.21468,58.082184 Z"/></g>
+			<g class="shape"><path class="white" d="M 58.956631,68.01796 83.565758,68.149559 39.085087,11.166921 Z" /></g>
+			<g class="shape"><path class="gray-light" d="M 39.085087,11.166921 20.529541,95.785477 58.956631,68.01796 Z" /></g>
+			<g class="shape"><path class="black" d="M 9.738372,95.390678 20.529541,95.785477 39.085087,11.166921 Z" /></g>
+			<g class="shape"><path class="black" d="M 9.738372,95.390678 23.029934,109.73504 20.529541,95.785477 Z" /></g>
+			<g class="shape"><path class="black" d="m 58.956631,68.01796 15.528751,48.95505 9.080376,-48.823451 z" /></g>
+			<g class="shape"><path class="black" d="M 20.529541,95.785477 74.485382,116.97301 58.956631,68.01796 Z" /></g>
+			<g class="shape"><path class="black" d="M 23.029934,109.73504 74.485382,116.97301 20.529541,95.785477 Z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 45.007069,132.63338 74.485382,116.97301 23.029934,109.73504 Z" /></g>
+			<g class="shape"><path class="black" d="M 74.485382,116.97301 110.21468,58.082184 83.565758,68.149559 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 23.029934,109.73504 10.133171,34.61069 11.843964,-11.71235 z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 61.983421,148.42532 74.485382,116.97301 45.007069,132.63338 Z" /></g>
+			<g class="shape"><path class="black" d="m 33.163105,144.34573 28.820316,4.07959 -16.976352,-15.79194 z" /></g>
+			<g class="shape"><path class="white" d="M 33.163105,144.34573 47.90226,166.58607 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 85.40815,167.50726 74.485382,116.97301 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="black" d="m 85.40815,167.50726 24.74073,1.18441 -35.663498,-51.71866 z" /></g>
+			<g class="shape"><path class="white" d="M 110.14888,168.69167 110.21468,58.082184 74.485382,116.97301 Z" /></g>
+			<g class="shape"><path class="white" d="M 56.982635,179.61444 61.983421,148.42532 47.90226,166.58607 Z" /></g>
+			<g class="shape"><path class="white" d="M 56.982635,179.61444 85.40815,167.50726 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 56.982635,179.61444 20.529542,1.44759 7.895973,-13.55477 z" /></g>
+			<g class="shape"><path class="gray-dark" d="m 56.982635,179.61444 11.975564,13.68636 8.553978,-12.23877 z" /></g>
+			<g class="shape"><path class="gray-dark" d="m 85.40815,167.50726 24.74073,27.10953 0,-25.92512 z" /></g>
+			<g class="shape"><path class="white" d="M 77.512177,181.06203 110.14888,194.61679 85.40815,167.50726 Z" /></g>
+			<g class="shape"><path class="red" d="m 110.14888,194.61679 -10.922768,18.16075 10.922768,-9.08037 z" /></g>
+			<g class="shape"><path class="white" d="m 77.512177,181.06203 21.713935,31.71551 10.922768,-18.16075 z" /></g>
+			<g class="shape"><path class="white" d="M 68.958199,193.3008 99.226112,212.77754 77.512177,181.06203 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 99.226112,212.77754 10.922768,0 0,-8.52875 z" /></g>
+		</g>
+		<g class="right" transform="matrix(-1,0,0,1,213.61909,-8.7659605)">
+			<g class="shape"><path class="black" d="M 39.085087,11.166921 83.565758,68.149559 110.21468,58.082184 Z"/></g>
+			<g class="shape"><path class="white" d="M 58.956631,68.01796 83.565758,68.149559 39.085087,11.166921 Z" /></g>
+			<g class="shape"><path class="gray-light" d="M 39.085087,11.166921 20.529541,95.785477 58.956631,68.01796 Z" /></g>
+			<g class="shape"><path class="black" d="M 9.738372,95.390678 20.529541,95.785477 39.085087,11.166921 Z" /></g>
+			<g class="shape"><path class="black" d="M 9.738372,95.390678 23.029934,109.73504 20.529541,95.785477 Z" /></g>
+			<g class="shape"><path class="black" d="m 58.956631,68.01796 15.528751,48.95505 9.080376,-48.823451 z" /></g>
+			<g class="shape"><path class="black" d="M 20.529541,95.785477 74.485382,116.97301 58.956631,68.01796 Z" /></g>
+			<g class="shape"><path class="black" d="M 23.029934,109.73504 74.485382,116.97301 20.529541,95.785477 Z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 45.007069,132.63338 74.485382,116.97301 23.029934,109.73504 Z" /></g>
+			<g class="shape"><path class="black" d="M 74.485382,116.97301 110.21468,58.082184 83.565758,68.149559 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 23.029934,109.73504 10.133171,34.61069 11.843964,-11.71235 z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 61.983421,148.42532 74.485382,116.97301 45.007069,132.63338 Z" /></g>
+			<g class="shape"><path class="black" d="m 33.163105,144.34573 28.820316,4.07959 -16.976352,-15.79194 z" /></g>
+			<g class="shape"><path class="white" d="M 33.163105,144.34573 47.90226,166.58607 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="gray-dark" d="M 85.40815,167.50726 74.485382,116.97301 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="black" d="m 85.40815,167.50726 24.74073,1.18441 -35.663498,-51.71866 z" /></g>
+			<g class="shape"><path class="white" d="M 110.14888,168.69167 110.21468,58.082184 74.485382,116.97301 Z" /></g>
+			<g class="shape"><path class="white" d="M 56.982635,179.61444 61.983421,148.42532 47.90226,166.58607 Z" /></g>
+			<g class="shape"><path class="white" d="M 56.982635,179.61444 85.40815,167.50726 61.983421,148.42532 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 56.982635,179.61444 20.529542,1.44759 7.895973,-13.55477 z" /></g>
+			<g class="shape"><path class="gray-dark" d="m 56.982635,179.61444 11.975564,13.68636 8.553978,-12.23877 z" /></g>
+			<g class="shape"><path class="gray-dark" d="m 85.40815,167.50726 24.74073,27.10953 0,-25.92512 z" /></g>
+			<g class="shape"><path class="white" d="M 77.512177,181.06203 110.14888,194.61679 85.40815,167.50726 Z" /></g>
+			<g class="shape"><path class="red" d="m 110.14888,194.61679 -10.922768,18.16075 10.922768,-9.08037 z" /></g>
+			<g class="shape"><path class="white" d="m 77.512177,181.06203 21.713935,31.71551 10.922768,-18.16075 z" /></g>
+			<g class="shape"><path class="white" d="M 68.958199,193.3008 99.226112,212.77754 77.512177,181.06203 Z" /></g>
+			<g class="shape"><path class="gray-light" d="m 99.226112,212.77754 10.922768,0 0,-8.52875 z" /></g>
+		</g>
+	</g>
+</svg>

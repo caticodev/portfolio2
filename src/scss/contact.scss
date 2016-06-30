@@ -1,0 +1,259 @@
+.contact{
+	// font-size: 100%;
+	background: $contact-bg;
+	padding: 100px 10px 0;
+	position: relative;
+
+	&_overlay{
+		color: $contact-text;
+		background-color: $contact-bg;
+		position: absolute;
+		top: -20px;
+		width: 100%;
+		height: 450px;
+		font-size: 50px;
+		padding: 150px 40px 0;
+		font-weight: 200;
+		opacity: 0;
+		transition: opacity 1s ease-out;
+
+		&.done{
+			z-index: 2;
+			opacity: 1;
+		}
+	}
+
+	&_left, 
+	&_right{
+		display: inline-block;
+		vertical-align: top;
+		width: 48%;
+	}
+
+	&_left{
+		text-align: right;
+		margin-right: 4%;
+	}
+
+	&_icons{
+		max-width: 514px;
+		display: inline-block;
+		text-align: left;
+	}
+
+	&_title{
+		color: $contact-title;
+		font-family: 'Wire One';
+		font-size: 100px;
+		margin-bottom: 70px;
+	}
+
+	&_form{
+		font-size: 20px;
+		text-align: center;
+		position: relative;
+		max-width: 500px;
+	}
+
+	&_input {
+		position: relative;
+		z-index: 1;
+		display: inline-block;
+		margin: 1.1em;
+		max-width: 350px;
+		width: calc(100% - 2em);
+		vertical-align: top;
+	}
+
+	&_field {
+		font-size: 20px;
+		position: relative;
+		display: block;
+		float: right;
+		padding: 0.8em;
+		border: none;
+		border-radius: 0;
+		font-family: 'Raleway';
+		-webkit-appearance: none;
+		width: 100%;
+		background: transparent;
+		color: $contact-text;
+
+		&:focus{
+			outline: none;
+		}
+	}
+
+	&_label {
+		display: inline-block;
+		float: right;
+		-webkit-font-smoothing: antialiased;
+	  -moz-osx-font-smoothing: grayscale;
+		-webkit-touch-callout: none;
+		user-select: none;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		color: $contact-text;
+		text-align: left;
+		cursor: text;
+	}
+
+	&_labelName {
+		position: relative;
+		display: block;
+		padding: 0.8em;
+		width: 100%;
+		transform-origin: 0% 50%;
+		transition: transform 0.3s;
+	}
+
+	&_border {
+		position: absolute;
+		top: 0;
+		left: 0;
+		fill: none;
+		transform: scale3d(1, -1, 1);
+		transition: stroke-dashoffset 0.3s;
+		pointer-events: none;
+		width: 100%;
+		height: 100%;
+
+		stroke: $contact-border;
+		stroke-width: 4px;
+		stroke-dasharray: 962;
+		stroke-dashoffset: 558;
+	}
+
+	&_submit{
+		line-height: 50px;
+		position: relative;
+		font-family: 'Raleway';
+		color: $contact-text;
+		font-size: 20px;
+		text-transform: uppercase;
+		margin-top: 20px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		perspective: 1000px;
+
+
+		span{
+			position: relative;
+			display: inline-block;
+			border: 2px solid $contact-border;
+			padding: 0 1.5em;
+			transition: transform 1s ease-out, color .3s, border .3s;
+			transform-origin: 50% 0;
+			transform-style: preserve-3d;
+
+			&:before{
+				position: absolute;
+				font-size: 50px;
+		    top: 100%;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    content: '\2713';
+		    transition: background 0.3s;
+		    transform: rotateX(-89deg);
+		    transform-origin: 50% 0;
+		    border: 2px solid $contact-border;
+		    color: $contact-hover;
+			}
+		}
+
+		&:hover{
+			color: $contact-hover;
+			span{
+				border-color: $contact-hover;
+			}
+		}
+
+		&:focus{
+			outline: none;
+		}
+
+		&.done{
+			cursor: auto;
+
+			span{
+				transform: rotateX(90deg) translateY(-25px);
+			}
+
+			&:focus{
+				outline: none;
+			}
+		}
+	}
+
+	&_msg{
+		resize: none;
+		height: 200px;
+		transition: max-height .3s;
+	}
+
+	&_cp{
+		font-size: 15px;
+		position: absolute;
+		bottom: 10px;
+		left: 0;
+		opacity: .4;
+		color: $contact-text;
+		width: 100%;
+		text-align: center;
+	}
+
+	.msg{
+		stroke-dasharray: 1406;
+		stroke-dashoffset: 1000;
+	}
+
+	.contact_field:focus + .contact_label,
+	.filled .contact_label {
+		cursor: default;
+		pointer-events: none;
+	}
+
+	.contact_field:focus + .contact_label svg,
+	.filled svg {
+		stroke-dashoffset: 0;
+	}
+
+	.contact_field:focus + .cntact_label .contact_labelName,
+	.filled .contact_labelName {
+		transform: scale3d(0.81, 0.81, 1) translate3d(-0.8em, -3em, 0);
+		color: $contact-hover;
+	}
+
+	.filled .contact_msg{
+		max-height: 200px;
+	}
+
+	.filled .msg{
+		stroke-width: 4px;
+	}
+}
+
+@media (max-width: $mobile){
+	.contact{
+		padding-top: 50px;
+		padding-bottom: 220px;
+
+		&_left,
+		&_right{
+			width: 100%;
+			text-align: center;
+			margin: 0;
+		}
+
+		&_form{
+			margin: 0 auto;
+		}
+
+		&_title{
+			margin-bottom: 20px;
+		}
+	}
+}
