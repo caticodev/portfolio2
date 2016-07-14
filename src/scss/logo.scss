@@ -2,25 +2,30 @@
 	position: absolute;
 	z-index: 1;
 	width: 100%;
-	height: 100%;
+	height: 90%;
+
+	&.mobile{
+		display: none;
+	}
 
 	&_wrapper{
 		position: absolute;
-		top: 15%;;
+		top: 15%;
+		// top: 13.5vh;
 		left: 50%;
 		transform: translateX(-50%);
 
 		&:hover{
-			padding: 0 200px;
+			padding: 0 50%;
 		}
 	}
 
 	svg{
-		width: 280px;
-		height: 280px;
+		width: 41vh;
+		height: 41vh;
 		overflow: visible;
-		fill: url(#g443);
-		stroke: url(#g443);
+		fill: url(.#g443);
+		stroke: url(.#g443);
 		transition: fill .3s ease;
 	}
 
@@ -28,7 +33,7 @@
 
 		&.black{
 			fill-opacity: 0.9;
-			stroke-opacity: 0.4;
+			stroke-opacity: 0.3;
 		}
 
 		&.white{
@@ -82,16 +87,25 @@
 	}
 }
 
-@media (max-width: $mobile){
+@media screen and (max-width: $mobile), screen and (max-height: $minHeight){
 	.logo{
+		width: auto;
+		height: auto;
+		top: 15%;
+		left: 50%;
+		display: none;
+
+		&.mobile{
+			display: block;
+		}
 
 		&_wrapper{
 			top: 10%;
 		}
 
 		svg{
-			width: 200px;
-			height: 200px;
+			max-width: 300px;
+			max-height: 300px;
 		}
 
 		&.small{

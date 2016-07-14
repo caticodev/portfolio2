@@ -4,6 +4,11 @@
 		display: block;
 		cursor: pointer;
 		margin-bottom: 30px;
+		// margin-bottom: 4.5vh;
+
+		&:not(:last-child){
+			margin-right: 20px;
+		}
 
 		&:hover{
 
@@ -28,7 +33,6 @@
 		display: inline-block;
 		vertical-align: middle;
 		border-radius: 50%;
-		margin-right: 20px;
 		cursor: pointer;
 		position: relative;
 		transition: background 0.2s, color 0.2s;
@@ -67,6 +71,7 @@
 		vertical-align: middle;
 		width: calc(100% - 100px);
 		line-height: 30px;
+		margin-left: 20px;
 
 		span{
 			display: inline-block;
@@ -87,13 +92,21 @@
 	}
 }
 
-@media (max-width: $mobile){
+@media screen and (max-width: $mobile){
 	.icons{
 		position: absolute;
 		left: 0;
 		bottom: 40px;
 		width: 100%;
 		text-align: center;
+
+		&_el{
+			width: 25%;
+
+			&:not(:last-child){
+				margin-right: 0;
+			}
+		}
 
 		&_title{
 			display: none;
@@ -104,6 +117,8 @@
 		}
 	}
 }
+
+
 
 
 

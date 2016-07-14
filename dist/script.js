@@ -1,4 +1,130 @@
 /*!
+ * VERSION: 1.7.6
+ * DATE: 2015-12-10
+ * UPDATES AND DOCS AT: http://greensock.com
+ *
+ * @license Copyright (c) 2008-2016, GreenSock. All rights reserved.
+ * This work is subject to the terms at http://greensock.com/standard-license or for
+ * Club GreenSock members, the software agreement that was issued with your membership.
+ * 
+ * @author: Jack Doyle, jack@greensock.com
+ **/
+var _gsScope = (typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window; //helps ensure compatibility with AMD/RequireJS and CommonJS/Node
+(_gsScope._gsQueue || (_gsScope._gsQueue = [])).push( function() {
+
+	"use strict";
+
+	var _doc = document.documentElement,
+		_window = window,
+		_max = function(element, axis) {
+			var dim = (axis === "x") ? "Width" : "Height",
+				scroll = "scroll" + dim,
+				client = "client" + dim,
+				body = document.body;
+			return (element === _window || element === _doc || element === body) ? Math.max(_doc[scroll], body[scroll]) - (_window["inner" + dim] || _doc[client] || body[client]) : element[scroll] - element["offset" + dim];
+		},
+
+		ScrollToPlugin = _gsScope._gsDefine.plugin({
+			propName: "scrollTo",
+			API: 2,
+			version:"1.7.6",
+
+			//called when the tween renders for the first time. This is where initial values should be recorded and any setup routines should run.
+			init: function(target, value, tween) {
+				this._wdw = (target === _window);
+				this._target = target;
+				this._tween = tween;
+				if (typeof(value) !== "object") {
+					value = {y:value}; //if we don't receive an object as the parameter, assume the user intends "y".
+				}
+				this.vars = value;
+				this._autoKill = (value.autoKill !== false);
+				this.x = this.xPrev = this.getX();
+				this.y = this.yPrev = this.getY();
+				if (value.x != null) {
+					this._addTween(this, "x", this.x, (value.x === "max") ? _max(target, "x") : value.x, "scrollTo_x", true);
+					this._overwriteProps.push("scrollTo_x");
+				} else {
+					this.skipX = true;
+				}
+				if (value.y != null) {
+					this._addTween(this, "y", this.y, (value.y === "max") ? _max(target, "y") : value.y, "scrollTo_y", true);
+					this._overwriteProps.push("scrollTo_y");
+				} else {
+					this.skipY = true;
+				}
+				return true;
+			},
+
+			//called each time the values should be updated, and the ratio gets passed as the only parameter (typically it's a value between 0 and 1, but it can exceed those when using an ease like Elastic.easeOut or Back.easeOut, etc.)
+			set: function(v) {
+				this._super.setRatio.call(this, v);
+
+				var x = (this._wdw || !this.skipX) ? this.getX() : this.xPrev,
+					y = (this._wdw || !this.skipY) ? this.getY() : this.yPrev,
+					yDif = y - this.yPrev,
+					xDif = x - this.xPrev;
+
+				if (this.x < 0) { //can't scroll to a position less than 0! Might happen if someone uses a Back.easeOut or Elastic.easeOut when scrolling back to the top of the page (for example)
+					this.x = 0;
+				}
+				if (this.y < 0) {
+					this.y = 0;
+				}
+				if (this._autoKill) {
+					//note: iOS has a bug that throws off the scroll by several pixels, so we need to check if it's within 7 pixels of the previous one that we set instead of just looking for an exact match.
+					if (!this.skipX && (xDif > 7 || xDif < -7) && x < _max(this._target, "x")) {
+						this.skipX = true; //if the user scrolls separately, we should stop tweening!
+					}
+					if (!this.skipY && (yDif > 7 || yDif < -7) && y < _max(this._target, "y")) {
+						this.skipY = true; //if the user scrolls separately, we should stop tweening!
+					}
+					if (this.skipX && this.skipY) {
+						this._tween.kill();
+						if (this.vars.onAutoKill) {
+							this.vars.onAutoKill.apply(this.vars.onAutoKillScope || this._tween, this.vars.onAutoKillParams || []);
+						}
+					}
+				}
+				if (this._wdw) {
+					_window.scrollTo((!this.skipX) ? this.x : x, (!this.skipY) ? this.y : y);
+				} else {
+					if (!this.skipY) {
+						this._target.scrollTop = this.y;
+					}
+					if (!this.skipX) {
+						this._target.scrollLeft = this.x;
+					}
+				}
+				this.xPrev = this.x;
+				this.yPrev = this.y;
+			}
+
+		}),
+		p = ScrollToPlugin.prototype;
+
+	ScrollToPlugin.max = _max;
+
+	p.getX = function() {
+		return (!this._wdw) ? this._target.scrollLeft : (_window.pageXOffset != null) ? _window.pageXOffset : (_doc.scrollLeft != null) ? _doc.scrollLeft : document.body.scrollLeft;
+	};
+
+	p.getY = function() {
+		return (!this._wdw) ? this._target.scrollTop : (_window.pageYOffset != null) ? _window.pageYOffset : (_doc.scrollTop != null) ? _doc.scrollTop : document.body.scrollTop;
+	};
+
+	p._kill = function(lookup) {
+		if (lookup.scrollTo_x) {
+			this.skipX = true;
+		}
+		if (lookup.scrollTo_y) {
+			this.skipY = true;
+		}
+		return this._super._kill.call(this, lookup);
+	};
+
+}); if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); }
+/*!
  * VERSION: 1.18.5
  * DATE: 2016-05-24
  * UPDATES AND DOCS AT: http://greensock.com
@@ -7697,508 +7823,43 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 		_tickerActive = false; //ensures that the first official animation forces a ticker.tick() to update the time when it is instantiated
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
-/**
- * Parallax.js
- * @author Matthew Wagerfield - @wagerfield
- * @description Creates a parallax effect between an array of layers,
- *              driving the motion from the gyroscope output of a smartdevice.
- *              If no gyroscope is available, the cursor position is used.
- */
-;(function(window, document, undefined) {
+var mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
 
-  // Strict Mode
-  'use strict';
-
-  // Constants
-  var NAME = 'Parallax';
-  var MAGIC_NUMBER = 30;
-  var DEFAULTS = {
-    relativeInput: false,
-    clipRelativeInput: false,
-    calibrationThreshold: 100,
-    calibrationDelay: 500,
-    supportDelay: 500,
-    calibrateX: false,
-    calibrateY: true,
-    invertX: true,
-    invertY: true,
-    limitX: false,
-    limitY: false,
-    scalarX: 10.0,
-    scalarY: 10.0,
-    frictionX: 0.1,
-    frictionY: 0.1,
-    originX: 0.5,
-    originY: 0.5
-  };
-
-  function Parallax(element, options) {
-
-    // DOM Context
-    this.element = element;
-    this.layers = element.getElementsByClassName('layer');
-
-    // Data Extraction
-    var data = {
-      calibrateX: this.data(this.element, 'calibrate-x'),
-      calibrateY: this.data(this.element, 'calibrate-y'),
-      invertX: this.data(this.element, 'invert-x'),
-      invertY: this.data(this.element, 'invert-y'),
-      limitX: this.data(this.element, 'limit-x'),
-      limitY: this.data(this.element, 'limit-y'),
-      scalarX: this.data(this.element, 'scalar-x'),
-      scalarY: this.data(this.element, 'scalar-y'),
-      frictionX: this.data(this.element, 'friction-x'),
-      frictionY: this.data(this.element, 'friction-y'),
-      originX: this.data(this.element, 'origin-x'),
-      originY: this.data(this.element, 'origin-y')
-    };
-
-    // Delete Null Data Values
-    for (var key in data) {
-      if (data[key] === null) delete data[key];
-    }
-
-    // Compose Settings Object
-    this.extend(this, DEFAULTS, options, data);
-
-    // States
-    this.calibrationTimer = null;
-    this.calibrationFlag = true;
-    this.enabled = false;
-    this.depths = [];
-    this.raf = null;
-
-    // Element Bounds
-    this.bounds = null;
-    this.ex = 0;
-    this.ey = 0;
-    this.ew = 0;
-    this.eh = 0;
-
-    // Element Center
-    this.ecx = 0;
-    this.ecy = 0;
-
-    // Element Range
-    this.erx = 0;
-    this.ery = 0;
-
-    // Calibration
-    this.cx = 0;
-    this.cy = 0;
-
-    // Input
-    this.ix = 0;
-    this.iy = 0;
-
-    // Motion
-    this.mx = 0;
-    this.my = 0;
-
-    // Velocity
-    this.vx = 0;
-    this.vy = 0;
-
-    // Callbacks
-    this.onMouseMove = this.onMouseMove.bind(this);
-    this.onDeviceOrientation = this.onDeviceOrientation.bind(this);
-    this.onOrientationTimer = this.onOrientationTimer.bind(this);
-    this.onCalibrationTimer = this.onCalibrationTimer.bind(this);
-    this.onAnimationFrame = this.onAnimationFrame.bind(this);
-    this.onWindowResize = this.onWindowResize.bind(this);
-
-    // Initialise
-    this.initialise();
+function shuffle(a){
+	var j, x, i;
+  for (i = a.length; i; i -= 1) {
+    j = Math.floor(Math.random() * i);
+    x = a[i - 1];
+    a[i - 1] = a[j];
+    a[j] = x;
   }
+};
 
-  Parallax.prototype.extend = function() {
-    if (arguments.length > 1) {
-      var master = arguments[0];
-      for (var i = 1, l = arguments.length; i < l; i++) {
-        var object = arguments[i];
-        for (var key in object) {
-          master[key] = object[key];
-        }
-      }
-    }
-  };
-
-  Parallax.prototype.data = function(element, name) {
-    return this.deserialize(element.getAttribute('data-'+name));
-  };
-
-  Parallax.prototype.deserialize = function(value) {
-    if (value === 'true') {
-      return true;
-    } else if (value === 'false') {
-      return false;
-    } else if (value === 'null') {
-      return null;
-    } else if (!isNaN(parseFloat(value)) && isFinite(value)) {
-      return parseFloat(value);
-    } else {
-      return value;
-    }
-  };
-
-  Parallax.prototype.camelCase = function(value) {
-    return value.replace(/-+(.)?/g, function(match, character){
-      return character ? character.toUpperCase() : '';
-    });
-  };
-
-  Parallax.prototype.transformSupport = function(value) {
-    var element = document.createElement('div');
-    var propertySupport = false;
-    var propertyValue = null;
-    var featureSupport = false;
-    var cssProperty = null;
-    var jsProperty = null;
-    for (var i = 0, l = this.vendors.length; i < l; i++) {
-      if (this.vendors[i] !== null) {
-        cssProperty = this.vendors[i][0] + 'transform';
-        jsProperty = this.vendors[i][1] + 'Transform';
-      } else {
-        cssProperty = 'transform';
-        jsProperty = 'transform';
-      }
-      if (element.style[jsProperty] !== undefined) {
-        propertySupport = true;
-        break;
-      }
-    }
-    switch(value) {
-      case '2D':
-        featureSupport = propertySupport;
-        break;
-      case '3D':
-        if (propertySupport) {
-          var body = document.body || document.createElement('body');
-          var documentElement = document.documentElement;
-          var documentOverflow = documentElement.style.overflow;
-          if (!document.body) {
-            documentElement.style.overflow = 'hidden';
-            documentElement.appendChild(body);
-            body.style.overflow = 'hidden';
-            body.style.background = '';
-          }
-          body.appendChild(element);
-          element.style[jsProperty] = 'translate3d(1px,1px,1px)';
-          propertyValue = window.getComputedStyle(element).getPropertyValue(cssProperty);
-          featureSupport = propertyValue !== undefined && propertyValue.length > 0 && propertyValue !== 'none';
-          documentElement.style.overflow = documentOverflow;
-          body.removeChild(element);
-        }
-        break;
-    }
-    return featureSupport;
-  };
-
-  Parallax.prototype.ww = null;
-  Parallax.prototype.wh = null;
-  Parallax.prototype.wcx = null;
-  Parallax.prototype.wcy = null;
-  Parallax.prototype.wrx = null;
-  Parallax.prototype.wry = null;
-  Parallax.prototype.portrait = null;
-  Parallax.prototype.desktop = !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i);
-  Parallax.prototype.vendors = [null,['-webkit-','webkit'],['-moz-','Moz'],['-o-','O'],['-ms-','ms']];
-  Parallax.prototype.motionSupport = !!window.DeviceMotionEvent;
-  Parallax.prototype.orientationSupport = !!window.DeviceOrientationEvent;
-  Parallax.prototype.orientationStatus = 0;
-  Parallax.prototype.propertyCache = {};
-
-  Parallax.prototype.initialise = function() {
-
-    if (Parallax.prototype.transform2DSupport === undefined) {
-      Parallax.prototype.transform2DSupport = Parallax.prototype.transformSupport('2D');
-      Parallax.prototype.transform3DSupport = Parallax.prototype.transformSupport('3D');
-    }
-
-    // Configure Context Styles
-    if (this.transform3DSupport) this.accelerate(this.element);
-    var style = window.getComputedStyle(this.element);
-    if (style.getPropertyValue('position') === 'static') {
-      this.element.style.position = 'relative';
-    }
-
-    // Setup
-    this.updateLayers();
-    this.updateDimensions();
-    this.enable();
-    this.queueCalibration(this.calibrationDelay);
-  };
-
-  Parallax.prototype.updateLayers = function() {
-
-    // Cache Layer Elements
-    this.layers = this.element.getElementsByClassName('layer');
-    this.depths = [];
-
-    // Configure Layer Styles
-    for (var i = 0, l = this.layers.length; i < l; i++) {
-      var layer = this.layers[i];
-      if (this.transform3DSupport) this.accelerate(layer);
-      layer.style.position = i ? 'absolute' : 'relative';
-      layer.style.display = 'block';
-      layer.style.left = 0;
-      layer.style.top = 0;
-
-      // Cache Layer Depth
-      this.depths.push(this.data(layer, 'depth') || 0);
-    }
-  };
-
-  Parallax.prototype.updateDimensions = function() {
-    this.ww = window.innerWidth;
-    this.wh = window.innerHeight;
-    this.wcx = this.ww * this.originX;
-    this.wcy = this.wh * this.originY;
-    this.wrx = Math.max(this.wcx, this.ww - this.wcx);
-    this.wry = Math.max(this.wcy, this.wh - this.wcy);
-  };
-
-  Parallax.prototype.updateBounds = function() {
-    this.bounds = this.element.getBoundingClientRect();
-    this.ex = this.bounds.left;
-    this.ey = this.bounds.top;
-    this.ew = this.bounds.width;
-    this.eh = this.bounds.height;
-    this.ecx = this.ew * this.originX;
-    this.ecy = this.eh * this.originY;
-    this.erx = Math.max(this.ecx, this.ew - this.ecx);
-    this.ery = Math.max(this.ecy, this.eh - this.ecy);
-  };
-
-  Parallax.prototype.queueCalibration = function(delay) {
-    clearTimeout(this.calibrationTimer);
-    this.calibrationTimer = setTimeout(this.onCalibrationTimer, delay);
-  };
-
-  Parallax.prototype.enable = function() {
-    if (!this.enabled) {
-      this.enabled = true;
-      if (this.orientationSupport) {
-        this.portrait = null;
-        window.addEventListener('deviceorientation', this.onDeviceOrientation);
-        setTimeout(this.onOrientationTimer, this.supportDelay);
-      } else {
-        this.cx = 0;
-        this.cy = 0;
-        this.portrait = false;
-        window.addEventListener('mousemove', this.onMouseMove);
-      }
-      window.addEventListener('resize', this.onWindowResize);
-      this.raf = requestAnimationFrame(this.onAnimationFrame);
-    }
-  };
-
-  Parallax.prototype.disable = function() {
-    if (this.enabled) {
-      this.enabled = false;
-      if (this.orientationSupport) {
-        window.removeEventListener('deviceorientation', this.onDeviceOrientation);
-      } else {
-        window.removeEventListener('mousemove', this.onMouseMove);
-      }
-      window.removeEventListener('resize', this.onWindowResize);
-      cancelAnimationFrame(this.raf);
-    }
-  };
-
-  Parallax.prototype.calibrate = function(x, y) {
-    this.calibrateX = x === undefined ? this.calibrateX : x;
-    this.calibrateY = y === undefined ? this.calibrateY : y;
-  };
-
-  Parallax.prototype.invert = function(x, y) {
-    this.invertX = x === undefined ? this.invertX : x;
-    this.invertY = y === undefined ? this.invertY : y;
-  };
-
-  Parallax.prototype.friction = function(x, y) {
-    this.frictionX = x === undefined ? this.frictionX : x;
-    this.frictionY = y === undefined ? this.frictionY : y;
-  };
-
-  Parallax.prototype.scalar = function(x, y) {
-    this.scalarX = x === undefined ? this.scalarX : x;
-    this.scalarY = y === undefined ? this.scalarY : y;
-  };
-
-  Parallax.prototype.limit = function(x, y) {
-    this.limitX = x === undefined ? this.limitX : x;
-    this.limitY = y === undefined ? this.limitY : y;
-  };
-
-  Parallax.prototype.origin = function(x, y) {
-    this.originX = x === undefined ? this.originX : x;
-    this.originY = y === undefined ? this.originY : y;
-  };
-
-  Parallax.prototype.clamp = function(value, min, max) {
-    value = Math.max(value, min);
-    value = Math.min(value, max);
-    return value;
-  };
-
-  Parallax.prototype.css = function(element, property, value) {
-    var jsProperty = this.propertyCache[property];
-    if (!jsProperty) {
-      for (var i = 0, l = this.vendors.length; i < l; i++) {
-        if (this.vendors[i] !== null) {
-          jsProperty = this.camelCase(this.vendors[i][1] + '-' + property);
-        } else {
-          jsProperty = property;
-        }
-        if (element.style[jsProperty] !== undefined) {
-          this.propertyCache[property] = jsProperty;
-          break;
-        }
-      }
-    }
-    element.style[jsProperty] = value;
-  };
-
-  Parallax.prototype.accelerate = function(element) {
-    this.css(element, 'transform', 'translate3d(0,0,0)');
-    this.css(element, 'transform-style', 'preserve-3d');
-    this.css(element, 'backface-visibility', 'hidden');
-  };
-
-  Parallax.prototype.setPosition = function(element, x, y) {
-    x += 'px';
-    y += 'px';
-    if (this.transform3DSupport) {
-      this.css(element, 'transform', 'translate3d('+x+','+y+',0)');
-    } else if (this.transform2DSupport) {
-      this.css(element, 'transform', 'translate('+x+','+y+')');
-    } else {
-      element.style.left = x;
-      element.style.top = y;
-    }
-  };
-
-  Parallax.prototype.onOrientationTimer = function() {
-    if (this.orientationSupport && this.orientationStatus === 0) {
-      this.disable();
-      this.orientationSupport = false;
-      this.enable();
-    }
-  };
-
-  Parallax.prototype.onCalibrationTimer = function() {
-    this.calibrationFlag = true;
-  };
-
-  Parallax.prototype.onWindowResize = function() {
-    this.updateDimensions();
-  };
-
-  Parallax.prototype.onAnimationFrame = function() {
-    this.updateBounds();
-    var dx = this.ix - this.cx;
-    var dy = this.iy - this.cy;
-    if ((Math.abs(dx) > this.calibrationThreshold) || (Math.abs(dy) > this.calibrationThreshold)) {
-      this.queueCalibration(0);
-    }
-    if (this.portrait) {
-      this.mx = this.calibrateX ? dy : this.iy;
-      this.my = this.calibrateY ? dx : this.ix;
-    } else {
-      this.mx = this.calibrateX ? dx : this.ix;
-      this.my = this.calibrateY ? dy : this.iy;
-    }
-    this.mx *= this.ew * (this.scalarX / 100);
-    this.my *= this.eh * (this.scalarY / 100);
-    if (!isNaN(parseFloat(this.limitX))) {
-      this.mx = this.clamp(this.mx, -this.limitX, this.limitX);
-    }
-    if (!isNaN(parseFloat(this.limitY))) {
-      this.my = this.clamp(this.my, -this.limitY, this.limitY);
-    }
-    this.vx += (this.mx - this.vx) * this.frictionX;
-    this.vy += (this.my - this.vy) * this.frictionY;
-    for (var i = 0, l = this.layers.length; i < l; i++) {
-      var layer = this.layers[i];
-      var depth = this.depths[i];
-      var xOffset = this.vx * depth * (this.invertX ? -1 : 1);
-      var yOffset = this.vy * depth * (this.invertY ? -1 : 1);
-      this.setPosition(layer, xOffset, yOffset);
-    }
-    this.raf = requestAnimationFrame(this.onAnimationFrame);
-  };
-
-  Parallax.prototype.onDeviceOrientation = function(event) {
-
-    // Validate environment and event properties.
-    if (!this.desktop && event.beta !== null && event.gamma !== null) {
-
-      // Set orientation status.
-      this.orientationStatus = 1;
-
-      // Extract Rotation
-      var x = (event.beta  || 0) / MAGIC_NUMBER; //  -90 :: 90
-      var y = (event.gamma || 0) / MAGIC_NUMBER; // -180 :: 180
-
-      // Detect Orientation Change
-      var portrait = this.wh > this.ww;
-      if (this.portrait !== portrait) {
-        this.portrait = portrait;
-        this.calibrationFlag = true;
-      }
-
-      // Set Calibration
-      if (this.calibrationFlag) {
-        this.calibrationFlag = false;
-        this.cx = x;
-        this.cy = y;
-      }
-
-      // Set Input
-      this.ix = x;
-      this.iy = y;
-    }
-  };
-
-  Parallax.prototype.onMouseMove = function(event) {
-
-    // Cache mouse coordinates.
-    var clientX = event.clientX;
-    var clientY = event.clientY;
-
-    // Calculate Mouse Input
-    if (!this.orientationSupport && this.relativeInput) {
-
-      // Clip mouse coordinates inside element bounds.
-      if (this.clipRelativeInput) {
-        clientX = Math.max(clientX, this.ex);
-        clientX = Math.min(clientX, this.ex + this.ew);
-        clientY = Math.max(clientY, this.ey);
-        clientY = Math.min(clientY, this.ey + this.eh);
-      }
-
-      // Calculate input relative to the element.
-      this.ix = (clientX - this.ex - this.ecx) / this.erx;
-      this.iy = (clientY - this.ey - this.ecy) / this.ery;
-
-    } else {
-
-      // Calculate input relative to the window.
-      this.ix = (clientX - this.wcx) / this.wrx;
-      this.iy = (clientY - this.wcy) / this.wry;
-    }
-  };
-
-  // Expose Parallax
-  window[NAME] = Parallax;
-
-})(window, document);
-
-var mobile = (window.innerWidth > 700 ? false : true);
-
+// window.addEventListener('resize', function () { 
+//   mobile = (window.innerWidth > 700 ? false : true);
+//   window.location.reload(); 
+// });
 (function(){
+
+	[].slice.call( document.querySelectorAll( '.contact_field' ) ).forEach( function( inputEl ) {
+
+		if( inputEl.value.trim() !== '' ) {
+			inputEl.parentNode.classList.add('filled');
+		}
+
+		inputEl.addEventListener( 'focus', onInputFocus );
+		inputEl.addEventListener( 'blur', onInputBlur );
+	} );
+
+	function onInputFocus( ev ) {
+		ev.target.parentNode.classList.add('filled');
+	}
+
+	function onInputBlur( ev ) {
+		if( ev.target.value.trim() === '' ) {
+			ev.target.parentNode.classList.remove('filled');
+		}
+	}
 
 	var ajax = {
 		ready: function ready (fn) {
@@ -8230,10 +7891,8 @@ var mobile = (window.innerWidth > 700 ? false : true);
 		// 	'https://formspree.io/kathy0kate@gmail.com',
 		// 	serialize(ev.target.elements),
 		// 	function(){
-				var btn = document.querySelector('.contact_submit');
-				btn.disabled = true;
-				btn.classList.add('done');
-				document.querySelector('.contact_overlay').classList.add('done');
+				document.querySelector('.contact_submit').disabled = true;
+				document.querySelector(".contact_form").classList.add('done');
 		// 	}
 		// ));
 	});
@@ -8241,120 +7900,371 @@ var mobile = (window.innerWidth > 700 ? false : true);
 	function serialize(inputs){
 		var data = '';
 		for(var i=0; i<inputs.length; i++){
-			data += inputs[i].name+'='+inputs[i].value+'&' 
+			data += inputs[i].name+'='+inputs[i].value+'&'; 
 		}
 		return data;
 	}
 }());
-(function() {
-	var fn = {};
+;(function(window, document, undefined){
 
-// settings
-	var container = document.querySelector('.main'),
-			introLink = document.querySelector('.intro_link'),
-			menuBtns = [].slice.call(document.querySelectorAll('.menu_item')),
-			animationTime = 1000,
-			easing = 'ease';
-//
-	var lastScroll = 0,
-			index = 0,
-			reveal = false;
-			quietPeriod = 100;
+	'use strict';
 
-	var logo = document.querySelector('.logo_wrapper'),
-		logomain = document.querySelector('.logo'),
-		svg = document.querySelector('.logo svg'),
-		introText = document.querySelector('.intro_text').children,
-		projects = [].slice.call(document.querySelectorAll('.proj_list li')),
-		introBorder = document.querySelector('.intro_border'),
-		menu = document.querySelector('.menu'),
-		paths = [].slice.call(document.querySelectorAll('.shape path')),
-		shapes = [].slice.call(document.querySelectorAll('.shape')),
-		left = [].slice.call(document.querySelectorAll('.left .shape')),
-		right = [].slice.call(document.querySelectorAll('.right .shape')),
-		rotate,
-		count = 0;
+	var center, 
+		layers = [], 
+		bounds,
+		x = 0,
+		y = 0,
+		mx = 0,
+		my = 0,
+		vx = 0,
+		vy = 0,
+		levels = [0.1, 0.2, 0.5, 0.6, 0.9, 1];
 
-	var parallax = new Parallax(document.getElementById("icons"), {
-	  scalarX: 6,
-	  scalarY: 6,
-	  frictionX: 0.5,
-	  frictionY: 0.5,
-	  originX: 0,
-	  originY: 0.5
-	});
+	function Icons(){
+		for(var i=0; i<levels.length; i++){
+			layers.push([].slice.call(document.querySelectorAll('.layer[data-level="'+levels[i]+'"]')));
+		}
+		bounds = document.getElementById('icons').getBoundingClientRect();
+		center = {x: window.innerWidth * 0.5, y: window.innerHeight * 0.5}
 
-	parallax.disable();
-
-	shuffle(paths);
-	function shuffle(a) {
-    var j, x, i;
-    for (i = a.length; i; i -= 1) {
-      j = Math.floor(Math.random() * i);
-      x = a[i - 1];
-      a[i - 1] = a[j];
-      a[j] = x;
-    }
+		this.onMouseMove = this.onMouseMove.bind(this);
+    this.onDeviceOrientation = this.onDeviceOrientation.bind(this);
+    this.enable = this.enable.bind(this);
+    this.animate = this.animate.bind(this);
 	}
 
-	// intro animation
-	TweenMax.staggerFrom(paths, .5, {opacity: 0, ease: Back.easeIn }, 0.03);
-	TweenMax.staggerFrom(introText, 1.5, {y: +200, opacity: 0}, 0.1);
-	// TweenLite.from(introBorder, 1, {height: 0});
+	Icons.prototype.enable = function(){
+		window.addEventListener('mousemove', this.onMouseMove);
+		window.addEventListener('deviceorientation', this.onDeviceOrientation);
+		this.raf = requestAnimationFrame(this.animate);
+	};
 
-	var transformCSS = function(pos, time, easing){
-		return "-webkit-transform: translate3d(0, " + pos + "%, 0); -webkit-transition: -webkit-transform " + time + "ms " + easing + "; -moz-transform: translate3d(0, " + pos + "%, 0); -moz-transition: -moz-transform " + time + "ms " + easing + "; -ms-transform: translate3d(0, " + pos + "%, 0); -ms-transition: -ms-transform " + time + "ms " + easing + "; transform: translate3d(0, " + pos + "%, 0); transition: transform " + time + "ms " + easing + ";";
-	}
-
-	var scrollDown = function(index){
-		container.style.cssText = transformCSS(-100*index, animationTime, easing);
-		menuBtns.forEach(function(el, i){
-			i===index ? el.classList.add('active') : el.classList.remove('active');
-		});
-		fn["section"+index]();
-	}
-
+	Icons.prototype.disable = function(){
+		window.removeEventListener('mousemove', this.onMouseMove);
+		window.removeEventListener('deviceorientation', this.onDeviceOrientation);
+		cancelAnimationFrame(this.raf);
+	};
 	
+	Icons.prototype.onMouseMove = function(ev){
+		x = (ev.clientX - center.x) / center.x;
+		y = (ev.clientY - center.y) / center.y;		
+	};
 
-	var scaleLogo = new TimelineLite({paused: true, onReverseComplete: function(){
-		TweenLite.set(logomain, {clearProps: 'all'});
-		TweenLite.set(logo, {clearProps: 'all'});
-		TweenLite.set(svg, {clearProps: 'all'});
-	}});
+	Icons.prototype.animate = function(){
+		mx = x * bounds.width * 0.1;
+		my = y * bounds.height * 0.1;
+		vx += (mx - vx) * 0.1;
+		vy += (my - vy) * 0.1;
 
-	scaleLogo
-		.to(logomain, 0.8, {width: 'auto', height: 'auto', cursor: 'pointer', className:'+=small'})
-		.to(logo, 0.8, {top: '20px', left: '20px', transform: 'none' }, 0)
-		.to(svg, 0.8, {width: 80, height: 80}, 0);
-
-	fn.section0 = function(){
-		parallax.disable();
-		scaleLogo.reverse();
-		logo.addEventListener('mouseover', logoMouseOver);
-		logo.addEventListener('mouseout', logoMouseOut);
-		logo.addEventListener('mousemove', logoMouseMove);
+		for(var i=0; i<layers.length; i++){
+			for(var j=0; j<layers[i].length; j++){
+				layers[i][j].style.transform = 'translate3d('+ (-vx*levels[i]) +'px, '+ (-vy*levels[i]) +'px , 0)';
+			}
+		}
+		this.raf = requestAnimationFrame(this.animate);
 	}
 
-	fn.section1 = function(){
-		parallax.disable();
-		scaleLogo.play();
-		logo.removeEventListener('mouseover', logoMouseOver);
-		logo.removeEventListener('mouseout', logoMouseOut);
-		logo.removeEventListener('mousemove', logoMouseMove);		
-		TweenMax.staggerFrom(projects, .75, {y:'+=500', opacity: 0}, 0.05);
+	Icons.prototype.onDeviceOrientation = function(ev){
+		if (window.innerHeight > window.innerWidth){
+			y = ev.beta/30;
+    	x = ev.gamma/30;
+		} else {
+			x = ev.beta/30;
+    	y = ev.gamma/30;
+		}
+	};
+
+	window['Icons'] = Icons;
+
+})(window, document);
+;(function(window, document, undefined){
+
+	'use strict';
+	var x, y;
+
+	function ImgTilt(element){
+		this.layers = element;
+		this.left = this.layers[0].getBoundingClientRect().left;
+		this.top = this.layers[0].getBoundingClientRect().top;
+		this.width = this.layers[0].offsetWidth;
+		this.height = this.layers[0].offsetHeight;
+
+		this.onMouseMove = this.onMouseMove.bind(this);
+    this.onDeviceOrientation = this.onDeviceOrientation.bind(this);
+    this.mCoords = this.mCoords.bind(this);
+    this.animate = this.animate.bind(this);
 	}
 
-	fn.section2 = function(){
-		parallax.enable();
+	ImgTilt.prototype.mCoords = function(par, dim, pos, i){
+		return 2*((i+1)*par/this.layers.length)/dim*pos - ((i+1)*par/this.layers.length);
+	};
+
+	ImgTilt.prototype.dCoords = function(par, pos, i){
+		return pos/par*(i+1);
+	};
+
+	ImgTilt.prototype.enable = function(){
+		window.addEventListener('mousemove', this.onMouseMove);
+		// window.addEventListener('deviceorientation', this.onDeviceOrientation);
+		this.raf = requestAnimationFrame(this.animate);
+	};
+
+	ImgTilt.prototype.disable = function(){
+		window.removeEventListener('mousemove', this.onMouseMove);
+		// window.removeEventListener('deviceorientation', this.onDeviceOrientation);
+		cancelAnimationFrame(this.raf);
+	};
+	
+	ImgTilt.prototype.onMouseMove = function(ev){
+		x = ev.clientX - this.left;
+		y = ev.clientY - this.top;
+			// w = this.width,
+			// h = this.height,
+			// coords = this.mCoords;
+	};
+
+	ImgTilt.prototype.onDeviceOrientation = function(ev){
+		var x = ev.beta,
+			y = ev.gamma,
+			z = ev.alpha,
+			coords = this.dCoords;
+
+		for(var i=0; i<this.layers.length; i++){
+			this.layers[i].style.transform = 'perspective(700px) translate3d(' + coords(10, x, i) + 'px,' + coords(10, y, i) + 'px,' + coords(10, z, i) + 'px) rotate3d(1,0,0,' + x*(i+1)/10 + 'deg) rotate3d(0,1,0,' + y*(i+1)/10 + 'deg)';
+		}
+	};
+
+	ImgTilt.prototype.animate = function(){
+		var w = this.width,
+			h = this.height,
+			coords = this.mCoords;
+
+		for(var i=0; i<this.layers.length; i++){
+			this.layers[i].style.transform = 'perspective(700px) translate3d(' + coords(-15, w, x, i) + 'px,' + coords(-15, h, y, i) + 'px,' + coords(10, h, y, i) + 'px) rotate3d(1,0,0,' + coords(2, h, y, i) + 'deg) rotate3d(0,1,0,' + coords(10, w, x, i) + 'deg)';
+		}	
+		this.raf = requestAnimationFrame(this.animate);
 	}
 
-	fn.section3 = function(){
-		parallax.disable();
+	window['ImgTilt'] = ImgTilt;
+
+})(window, document);
+;(function(window, document, undefined){
+
+	'use strict';
+
+	var count = 0,
+		rotate, logo, wrapper, svg, shapes, left, right, paths, interval;
+
+	function Logo(){
+		logo = document.querySelector('.logo');
+		wrapper = document.querySelector('.logo_wrapper');
+		svg = document.querySelector('.logo svg');
+		shapes = [].slice.call(document.querySelectorAll('.shape'));
+		left = [].slice.call(document.querySelectorAll('.left .shape'));
+		right = [].slice.call(document.querySelectorAll('.right .shape'));
+		paths = [].slice.call(document.querySelectorAll('.shape path'));
+
+		this.scale = new TimelineLite({paused: true, onReverseComplete: function(){
+			TweenLite.set(logo, {clearProps: 'all'});
+			TweenLite.set(wrapper, {clearProps: 'all'});
+			TweenLite.set(svg, {clearProps: 'all'});
+		}});
+
+		this.scale
+			.to(logo, 0.8, {width: 'auto', height: 'auto', cursor: 'pointer', className:'+=small'})
+			.to(wrapper, 0.8, {top: '20px', left: '20px', transform: 'none' }, 0)
+			.to(svg, 0.8, {width: 80, height: 80}, 0);
+
+		this.intro = this.intro.bind(this);
 	}
 
-	document.addEventListener('mousewheel', function(ev){
+	var rand = function() {
+	  return Math.random()*3+1;
+	};	
+
+	Logo.prototype.logoMouseOver = function(){
+		animTriangles();
+		interval = setInterval(animTriangles, 2500);
+		rotate = TweenMax.to(paths, 30,
+			{rotation: 360, transformOrigin:'center center', repeat: -1, ease: Power0.easeNone}
+		);
+	};
+
+	Logo.prototype.logoMouseOut = function(){
+		TweenLite.to(shapes, 0.5,
+			{x: 0, scale: 1, ease: Expo.easeIn, clearProps: "transform", overwrite: true}
+		);
+		TweenLite.to(paths, 0.5,
+			{directionalRotation:"0_short"}
+		);
+		if (rotate) rotate.kill();
+		clearInterval(interval);
+	};
+
+	function animTriangles(){
+		for (var i = 0; i < left.length; i++){
+			TweenLite.to(left[i], 1, {
+				x: -rand()*30, 
+				scale: rand(), 
+				svgOrigin:'125 125', 
+				ease: Expo.easeOut,
+			}, 0);
+		}
+		for (var j = 0; j < right.length; j++){
+			TweenLite.to(right[j], 1, {
+				x: rand()*30, 
+				scale: rand(), 
+				svgOrigin:'125 125', 
+				ease: Expo.easeOut
+			}, 0);
+		}
+	}
+
+	// Logo.prototype.logoMouseMove = function(){
+	// 	count++;
+	// 	if (count > 70){
+	// 		for (var i = 0; i < left.length; i++){
+	// 			TweenLite.to(left[i], 1,
+	// 				{x: -rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
+	// 				0
+	// 			);
+	// 		}
+	// 		for (var j = 0; j < right.length; j++){
+	// 			TweenLite.to(right[j], 1,
+	// 				{x: rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
+	// 				0
+	// 			);
+	// 		}
+	// 		count = 0;
+	// 	}
+	// };
+
+	Logo.prototype.enableHover = function(){
+		wrapper.addEventListener('mouseover', this.logoMouseOver);
+		wrapper.addEventListener('mouseout', this.logoMouseOut);
+		// wrapper.addEventListener('mousemove', this.logoMouseMove);
+	};
+
+	Logo.prototype.disableHover = function(){
+		wrapper.removeEventListener('mouseover', this.logoMouseOver);
+		wrapper.removeEventListener('mouseout', this.logoMouseOut);
+		// wrapper.removeEventListener('mousemove', this.logoMouseMove);
+		this.logoMouseOut();
+	};
+
+	Logo.prototype.intro = function(){
+		shuffle(paths);
+		TweenMax.staggerFrom(paths, 0.3, {opacity: 0, ease: Circ.easeIn }, 0.01);
+	};
+
+	window['Logo'] = Logo;
+
+})(window, document);
+(function() {
+	var fn = {},
+		logo = new Logo(),
+		iconspar = new Icons(),
+		// parallax = new Parallax(document.getElementById('icons')),
+		imgTilt = new ImgTilt([].slice.call(document.querySelectorAll('.intro_bgImg.top')));
+	
+	logo.enableHover();
+	imgTilt.enable();
+
+// loading
+	window.addEventListener('load', function(){
+		var loader = document.querySelector('.loader'),
+			circle = document.querySelector('.loader_circle'),
+			img = document.querySelector('.loader_img'),
+			start = new TimelineMax();
+
+		start
+			.set(img, {display: 'none', delay: 2})
+			.to(circle, 0.5, {scale: 0, ease: Expo.easeOut})
+			.set(loader, {display: 'none'})
+			.addCallback(logo.intro, 2)
+			.addCallback(animIntro, 2)
+	});
+//
+
+// intro animation
+	var introText = [].slice.call(document.querySelectorAll('.intro_title, .intro_subtitle, .intro_link'));
+
+	function animIntro(){
+		TweenMax.staggerFrom(introText, 1, {y: +300, opacity: 0, ease: Expo.easeOut}, 0.1);
+	}
+//
+
+
+//auto scroll
+	var container = document.querySelector('.main'),
+			wrapper = document.querySelector('.wrapper'),
+			menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
+			introLink = document.querySelector('.intro_link'),
+			animationTime = 1000,
+			lastScroll = 0, currentSec = 0, index = 0; quietPeriod = 100;
+
+	if (mobile){
+		iconspar.enable();
+		introLink.addEventListener('click', mobileScroll);
+		menuBtns.forEach(function(el, i){
+			el.addEventListener('click', mobileScroll);
+		});
+		wrapper.addEventListener('scroll', function(ev){
+			menuBtns.forEach(function(el, i){
+				el.classList.remove('active');
+			});	
+			if (wrapper.scrollTop < document.querySelector(menuBtns[1].getAttribute('href')).offsetTop) {
+				menuBtns[0].classList.add('active');	
+			} else if (wrapper.scrollTop < document.querySelector(menuBtns[2].getAttribute('href')).offsetTop) {
+				menuBtns[1].classList.add('active');
+			} else if (wrapper.scrollTop < document.querySelector(menuBtns[3].getAttribute('href')).offsetTop) {
+				menuBtns[2].classList.add('active');
+			} else {
+				menuBtns[3].classList.add('active');
+			}
+		})
+	} else {
+		document.addEventListener('mousewheel', onScroll);
+		document.addEventListener('DOMMouseScroll', onScroll);
+		document.addEventListener("touchstart",  onTouch);
+		introLink.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(1); });
+		menuBtns.forEach(function(el, i){
+			el.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(i); });
+		});
+	}
+
+	function mobileScroll(ev){
+		ev.preventDefault();
+		pos = document.querySelector(this.getAttribute('href')).offsetTop;
+		TweenLite.to(wrapper, 1, {scrollTo: {y: pos}, ease: Circ.easeOut});
+	}
+
+	var start;
+
+	function onTouch(ev){
+		start = ev.touches[0].pageY;
+		document.addEventListener("touchmove", swipe);
+	}
+
+	function swipe(ev){
+		var delta = start - ev.touches[0].pageY;
+		console.log(delta);
+
+		if (delta > 0){
+			if (index !== 3) index += 1;
+		} else {
+			if (index !== 0) index -= 1;
+		}
+
+		if (index !== currentSec) scrollDown(index);
+		document.removeEventListener("touchmove", swipe);
+	}
+	
+	function onScroll(ev){
+		ev.preventDefault();
+		
 		var delta = ev.wheelDelta || -ev.detail,
-			timeNow = new Date().getTime();
+				timeNow = new Date().getTime();
 
 		if(timeNow - lastScroll < quietPeriod + animationTime) {
 			ev.preventDefault();
@@ -8367,127 +8277,79 @@ var mobile = (window.innerWidth > 700 ? false : true);
 			if (index !== 0) index -= 1;
 		}
 
-		scrollDown(index);
+		if (index !== currentSec) scrollDown(index);
 		lastScroll = timeNow;
-	});
-
-	introLink.addEventListener('click', function(ev){ scrollDown(1); });
-	menuBtns.forEach(function(el, i){
-		el.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(i); });
-	})
-
-	
-	shuffle(paths);
-	function shuffle(a) {
-    var j, x, i;
-    for (i = a.length; i; i -= 1) {
-      j = Math.floor(Math.random() * i);
-      x = a[i - 1];
-      a[i - 1] = a[j];
-      a[j] = x;
-    }
 	}
 
-	var rand = function() {
-    return Math.random()*3+1;
-	}	
-
-	logo.addEventListener('mouseover', logoMouseOver);
-	logo.addEventListener('mouseout', logoMouseOut);
-	logo.addEventListener('mousemove', logoMouseMove);
-
-	function logoMouseOver(){
-		left.forEach(function(el){
-			TweenLite.to(el, 0.5,
-				{x: -rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-				0
-			);
+	var scrollDown = function(no){
+		fn["leaveSec"+currentSec]();
+		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
+		menuBtns.forEach(function(el, i){
+			i === no ? el.classList.add('active') : el.classList.remove('active');
 		});
-		right.forEach(function(el){
-			TweenLite.to(el, 0.5,
-				{x: rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-				0
-			);
-		});
-		rotate = TweenMax.to(paths, 30,
-			{rotation: 360, transformOrigin:'center center', repeat: -1, ease: Power0.easeNone}
-		);
-	}
+		fn["enterSec"+no]();
+		currentSec = no;
+		index = no;
+	};
+//
 
-	function logoMouseOut(){
-		TweenLite.to(shapes, 0.5,
-			{x: 0, scale: 1, ease: Expo.easeIn, clearProps: "transform", overwrite: true}
-		);
-		TweenLite.to(paths, 0.5,
-			{directionalRotation:"0_short"}
-		);
-		rotate.kill();
-	}
+// section specific animations
+	var projects = [].slice.call(document.querySelectorAll('.proj_list li')),
+		menu = document.querySelector('.menu'),
+		skills = [].slice.call(document.querySelectorAll('.skills_title, .skills_list li')),
+		icons = [].slice.call(document.querySelectorAll('.skills_icon')),
+		links = [].slice.call(document.querySelectorAll('.contact_title, .icons_el')),
+		form = [].slice.call(document.querySelectorAll('.contact_input, .contact_submit'));
 
-	function logoMouseMove(){
-		count++;
-		if (count > 70){
-			left.forEach(function(el){
-				TweenLite.to(el, 1,
-					{x: -rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-					0
-				);
-			});
-			right.forEach(function(el){
-				TweenLite.to(el, 1,
-					{x: rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-					0
-				);
-			});
-			count = 0;
-		}
-	}
+	shuffle(icons);
 
-	[].slice.call( document.querySelectorAll( '.contact_field' ) ).forEach( function( inputEl ) {
-			// in case the input is already filled..
-			if( inputEl.value.trim() !== '' ) {
-				inputEl.parentNode.classList.add('filled');
-			}
+	fn.enterSec0 = function(){
+		logo.scale.reverse();
+		logo.enableHover();
+		imgTilt.enable();
+		animIntro();
+	};
 
-			// events:
-			inputEl.addEventListener( 'focus', onInputFocus );
-			inputEl.addEventListener( 'blur', onInputBlur );
-		} );
+	fn.leaveSec0 = function(){
+		logo.scale.play();
+		logo.disableHover();
+		imgTilt.disable();
+	};
 
-		function onInputFocus( ev ) {
-			ev.target.parentNode.classList.add('filled');
-		}
+	fn.enterSec1 = function(){	
+		TweenMax.staggerFrom(projects, 0.75, {y:'+=500', opacity: 0}, 0.05);
+	};
 
-		function onInputBlur( ev ) {
-			if( ev.target.value.trim() === '' ) {
-				ev.target.parentNode.classList.remove('filled');
-			}
-		}
+	fn.leaveSec1 = function(){
+	};
 
-	// var lastpos = {};	
-	// 	if (!lastpos.x) {
-	// 		lastpos.x = ev.clientX;
-	// 		lastpos.y = ev.clientY;
-	// 	}
-	// 	var x = lastpos.x - ev.clientX,
-	// 			y = lastpos.y - ev.clientY;
-	// 	left.forEach(function(el){
-	// 		var scale = el._gsTransform.scaleX;
-	// 		TweenLite.set(el, {x: '+='+x*scale/10, y: '+='+y*scale/10} );
-	// 	});
+	fn.enterSec2 = function(){
+		TweenMax.staggerFrom(skills, 1, {x: '-=500', opacity: 0, ease: Circ.easeOut}, 0.05);
+		TweenMax.staggerFrom(icons, 1, {scale: 0, ease: Back.easeOut}, 0.05);
+		iconspar.enable();
+	};
 
-	// 	right.forEach(function(el){
-	// 		var scale = el._gsTransform.scaleX;
-	// 		TweenLite.set(el, {x: '-='+x*scale/10, y: '+='+y*scale/10} );
-	// 	});
-	// 	lastpos = {x: ev.clientX, y: ev.clientY};
-	
+	fn.leaveSec2 = function(){
+		iconspar.disable();
+	};
+
+	fn.enterSec3 = function(){
+		TweenMax.staggerFrom(links, 1, {y: '+=500', opacity: 0, ease: Circ.easeOut}, 0.1);
+		TweenMax.staggerFrom(form, 1, {y: '+=500', opacity: 0, ease: Circ.easeOut, clearProps: 'all'}, 0.1);
+	};
+
+	fn.leaveSec3 = function(){
+		setTimeout(function(){
+			document.querySelector('.contact_overlay').classList.remove('done');
+		}, 1000);
+	};
+//
 }());
 (function(){
 	var $menuBtn = [].slice.call(document.querySelectorAll(".menu_btn")),
 			$burger = document.querySelector(".menu_opener"),
 			$menu = document.querySelector(".menu"),
-			$burgerIcon = $burger.children[0];
+			$burgerIcon = $burger.children[0],
 
 		menuOpen=false,
 		spacing=75;
@@ -8498,18 +8360,18 @@ var mobile = (window.innerWidth > 700 ? false : true);
 			scaleY:0.8,
 			ease:Quad.easeOut,
 			onComplete:function(){
-				TweenLite.to($burger,.8,{
+				TweenLite.to($burger,0.8,{
 					scale:0.8,
 					ease:Elastic.easeOut,
 					easeParams:[1.1,0.8]
-				})
-				TweenLite.to($burgerIcon,.8,{
+				});
+				TweenLite.to($burgerIcon,0.8,{
 					scale:1.4,
 					ease:Elastic.easeOut,
 					easeParams:[1.1,0.8]
-				})
+				});
 			}
-		})
+		});
 		$menuBtn.forEach(function(el, i){
 			// var dist=Math.abs(i+1);
 			el.style.cssText = "z-index:"+(1-i);
@@ -8520,12 +8382,12 @@ var mobile = (window.innerWidth > 700 ? false : true);
 				ease:Elastic.easeOut,
 				easeParams:[1.01,0.5]
 			});
-			TweenLite.to(el,.8,{
+			TweenLite.to(el,0.8,{
 				delay:(0.2*(i+1))-0.1,
 				scale:0.8,
 				ease:Elastic.easeOut,
 				easeParams:[1.1,0.8]
-			})
+			});
 				
 			TweenLite.fromTo(el.children[0],0.2,{
 				scale:0
@@ -8533,8 +8395,8 @@ var mobile = (window.innerWidth > 700 ? false : true);
 				delay:(0.2*(i+1))-0.1,
 				scale:1,
 				ease:Quad.easeInOut
-			})
-		})
+			});
+		});
 	}
 	function close(){
 		TweenLite.to([$burger,$burger.children[0]],1.4,{
@@ -8549,22 +8411,22 @@ var mobile = (window.innerWidth > 700 ? false : true);
 
 			TweenLite.to(el,0.4+((-dist)*0.1),{
 				x:0,
-				scale:.95,
+				scale:0.95,
 				ease:Quad.easeInOut
 			});
 				
 			TweenLite.to(el.children[0],0.2,{
 				scale:0,
 				ease:Quad.easeIn
-			})
-		})
+			});
+		});
 	}
 
 	function toggle(){
-		menuOpen=!menuOpen
+		menuOpen=!menuOpen;
 		$menu.classList.toggle('open');
 
-		menuOpen?open():close();
+		menuOpen ? open() : close();
 	}
 	$burger.addEventListener('mousedown',function(){
 		toggle();
@@ -8572,7 +8434,7 @@ var mobile = (window.innerWidth > 700 ? false : true);
 	
 }());
 (function() {
-	if (!mobile){
+	// if (!mobile){
 		var getDirection = function (ev, obj) {
 			var x = ev.pageX,
 					y = ev.pageY,
@@ -8586,8 +8448,8 @@ var mobile = (window.innerWidth > 700 ? false : true);
 				right: Math.abs(x - left - w),
 				bottom: Math.abs(y - top - h),
 				left: Math.abs(x - left) 
-			}
-			return Object.keys(val).reduce(function(a, b){ return val[a] < val[b] ? a : b });
+			};
+			return Object.keys(val).reduce(function(a, b){ return val[a] < val[b] ? a : b; });
 		};
 
 		[].slice.call(document.querySelectorAll('.proj li')).forEach(function (el) {
@@ -8603,9 +8465,9 @@ var mobile = (window.innerWidth > 700 ? false : true);
 			
 		});
 
-		function animateEls(el){
-			TweenMax.staggerFrom(el.children[1].children[2].children, 0.5, 
-				{x: 135, ease: Back.easeOut.config(15), delay: 0.3}, 0.2);
-		}
-	}
+		// function animateEls(el){
+		// 	TweenMax.staggerFrom(el.children[1].children[2].children, 0.5, 
+		// 		{x: 135, ease: Back.easeOut.config(15), delay: 0.3}, 0.2);
+		// }
+	// }
 }());

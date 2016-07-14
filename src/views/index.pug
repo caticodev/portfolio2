@@ -4,9 +4,13 @@ html(lang="en")
 		meta(charset="utf-8")
 		meta(name="viewport", content="width=device-width,initial-scale=1")
 		title Catico
+		include favicon.html
 		link(rel="stylesheet", type="text/css", href="style.css")
 	body
-		- var projectPath = "img/projects/"
+		.loader
+			.loader_bg
+				.loader_circle
+			img.loader_img(src='img/ball-triangle.svg')
 		include vectors.svg
 		.wrapper
 			include menu.pug
@@ -14,14 +18,19 @@ html(lang="en")
 				.logo_wrapper
 					include logo.svg
 			main.main
-				section.section.intro
-					//- .intro_bg
-						//- include ../img/lines.svg
+				.logo.mobile
+					.logo_wrapper
+						include logo.svg
+				section.section.intro#sec0
+					.intro_bg
+						.intro_bgImg.base
+						.intro_bgImg.top
+						.intro_bgImg.top
 					.intro_text
 						h1.intro_title Catico
 						//- .intro_border
 						.intro_subtitle full stack web development
-					.intro_link projects
+					a(href="#sec1").intro_link projects
 						.intro_arrows
 							svg.intro_arrow
 								use(xlink:href="#arrow")
@@ -29,313 +38,241 @@ html(lang="en")
 								use(xlink:href="#arrow")
 							svg.intro_arrow
 								use(xlink:href="#arrow")
-				section.section.proj
+				section.section.proj#sec1
 					ul.proj_list
 						li
-							img.proj_img(src=projectPath+"project1.png")
+							//- .proj_imgs
+							//- 	img(src='img/projects/calc.png')
+							.proj_img(style="background-image: url('img/projects/proj1.png')")
 							.proj_overlay
 								.proj_title Calculator
 								.proj_descr Javascript calculator
 								.proj_links
-									a(href="#").proj_link
+									a(href="calculator").proj_link
 										svg
 											use(xlink:href="#link")
 										span demo
-									a(href="#").proj_link
+									a(href="http://codepen.io/catico/full/BjzzrQ/").proj_link
 										svg
 											use(xlink:href="#codepen")
 										span codepen
-									a(href="#").proj_link
+									a(href="https://github.com/CATlCO/calculator").proj_link
 										svg
 											use(xlink:href="#github")
 										span github
 								.proj_tags #html #css #js #jquery
 						li
-							img.proj_img(src=projectPath+"project2.png")
-							.proj_overlay
-								.proj_title Votex
-								.proj_descr Application for creating polls.
-								.proj_links
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#link")
-										span demo
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#codepen")
-										span codepen
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#github")
-										span github
-								.proj_tags #html #css #sass #js #nodejs #heroku #mongodb
-						li
-							img.proj_img(src=projectPath+"project3.png")
-							.proj_overlay
-								.proj_title Markdown previewer
-								.proj_descr Markdown previewer in React
-								.proj_links
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#link")
-										span demo
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#codepen")
-										span codepen
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#github")
-										span github
-								.proj_tags #html #css #sass #react
-						li
-							img.proj_img(src=projectPath+"project4.png")
-							.proj_overlay
-								.proj_title Pomodoro
-								.proj_descr Pomodoro timer in Javascript.
-								.proj_links
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#link")
-										span demo
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#codepen")
-										span codepen
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#github")
-										span github
-								.proj_tags #html #css #js #jquery
-						li
-							img.proj_img(src=projectPath+"project5.png")
+							.proj_imgs
+								img.single(src='img/projects/rqm.png', alt="Random quote machine")
 							.proj_overlay
 								.proj_title Quote machine
 								.proj_descr Generator of random quotes.
 								.proj_links
-									a(href="#").proj_link
+									a(href="quotemachine").proj_link
 										svg
 											use(xlink:href="#link")
 										span demo
-									a(href="#").proj_link
+									a(href="http://codepen.io/catico/full/obzWZw/").proj_link
 										svg
 											use(xlink:href="#codepen")
 										span codepen
-									a(href="#").proj_link
+									a(href="https://github.com/CATlCO/quotemachine").proj_link
 										svg
 											use(xlink:href="#github")
 										span github
 								.proj_tags #html #css #js #jquery #api
 						li
-							img.proj_img(src=projectPath+"project6.png")
+							.proj_imgs
+								img.single(src='img/projects/proj3.png', alt="Markdown previewer")
+							.proj_overlay
+								.proj_title Markdown previewer
+								.proj_descr Markdown previewer in React
+								.proj_links
+									a(href="react-markdown").proj_link
+										svg
+											use(xlink:href="#link")
+										span demo
+									a(href="http://codepen.io/catico/full/pbdNdB/").proj_link
+										svg
+											use(xlink:href="#codepen")
+										span codepen
+									a(href="https://github.com/CATlCO/react-markdown").proj_link
+										svg
+											use(xlink:href="#github")
+										span github
+								.proj_tags #html #css #sass #react
+						li
+							.proj_imgs
+								.double
+									img(src='img/projects/pom1.png', alt="Pomoro app - work")
+									img(src='img/projects/pom2.png', alt="Pomoro app - break")
+							//- .proj_img(style="background-image: url('img/projects/proj4.png')")
+							.proj_overlay
+								.proj_title Pomodoro
+								.proj_descr Pomodoro timer in Javascript.
+								.proj_links
+									a(href="pomodoro").proj_link
+										svg
+											use(xlink:href="#link")
+										span demo
+									a(href="http://codepen.io/catico/full/QygLMg/").proj_link
+										svg
+											use(xlink:href="#codepen")
+										span codepen
+									a(href="https://github.com/CATlCO/pomodoro").proj_link
+										svg
+											use(xlink:href="#github")
+										span github
+								.proj_tags #html #css #js #jquery
+						li
+							.proj_imgs
+								img.single(src='img/projects/proj6.png', alt="Facebook clone")
 							.proj_overlay
 								.proj_title Facebook clone
 								.proj_descr Simple clone of Facebook with basic functionality built in Ruby on Rails.
 								.proj_links
-									a(href="#").proj_link
+									a(href="http://odinfacebook.herokuapp.com").proj_link
 										svg
 											use(xlink:href="#link")
 										span demo
-									a(href="#").proj_link
-										svg
-											use(xlink:href="#codepen")
-										span codepen
-									a(href="#").proj_link
+									a(href="https://github.com/CATlCO/odin_facebook").proj_link
 										svg
 											use(xlink:href="#github")
 										span github
 								.proj_tags #html #bootstrap #css #sass #ruby #rails
-				section.section
-					.section_left
-					.section_top
-						//- h2.section_bgtitle.section_bgtitle__process Creative process
-					.process
-						h2.process_title Skills
-							//- .process_el
-							//- 	.process_icon
-							//- 		include ../img/bulb.svg
-							//- 	h3.process_title Think
-							//- 	.process_line
-							//- 		include ../img/drawing.svg
-							//- 	ul.process_list
-							//- 		li Research
-							//- 		li Analyze
-							//- 		li Wireframe
-							//- .process_el
-							//- 	.process_icon
-							//- 		include ../img/pencil.svg
-							//- 	h3.process_title Design
-							//- 	.process_line
-							//- 		include ../img/drawing.svg
-							//- 	ul.process_list
-							//- 		li Create
-							//- 		li Interface
-							//- 		li Experience
-							//- .process_el
-							//- 	.process_icon
-							//- 		include ../img/screen.svg
-							//- 	h3.process_title Develop
-							//- 	.process_line
-							//- 		include ../img/drawing.svg
-							//- 	ul.process_list
-							//- 		li Code
-							//- 		li Optimize
-							//- 		li Deploy
-						ul.process_services
+						li
+							.proj_imgs
+								img.single(src='img/projects/votex.png', alt="Votex app")
+							.proj_overlay
+								.proj_title Votex
+								.proj_descr Application for creating polls.
+								.proj_links
+									a(href="http://votexapp.herokuapp.com/").proj_link
+										svg
+											use(xlink:href="#link")
+										span demo
+									a(href="https://github.com/CATlCO/votingapp").proj_link
+										svg
+											use(xlink:href="#github")
+										span github
+								.proj_tags #html #css #sass #js #nodejs #heroku #mongodb
+				section.section.skills#sec2
+					.skills_left
+						h2.skills_title Skills
+						ul.skills_list
 							li design
 							li development
 							li ui / ux
 							li responsivity
 							li cross-browser compatibility
 							li mobile / desktop
-					.section_right
-						//- h2.section_bgtitle.section_bgtitle__skills Skills
-						ul#icons
-							//- li.layer.small(data-depth="0.30")
-							//- 	i.layer_icon.small_icon.devicon-d3js-plain
-							//- 	i.layer_icon.small_icon.devicon-grunt-plain
-							//- 	i.layer_icon.small_icon.devicon-photoshop-plain
-							//- 	i.layer_icon.small_icon.devicon-mysql-plain
-							//- 	i.layer_icon.small_icon.devicon-rails-plain
-							//- 	i.layer_icon.small_icon.devicon-ruby-plain
-							//- 	i.layer_icon.small_icon.devicon-gulp-plain
-							//- li.layer.medium(data-depth="0.60")
-							//- 	i.layer_icon.medium_icon.devicon-bootstrap-plain
-							//- 	i.layer_icon.medium_icon.devicon-heroku-plain
-							//- 	i.layer_icon.medium_icon.devicon-less-plain
-							//- 	i.layer_icon.medium_icon.devicon-nodejs-plain
-							//- 	i.layer_icon.medium_icon.devicon-sass-plain
-							//- 	i.layer_icon.medium_icon.devicon-mongodb-plain
-							//- 	i.layer_icon.medium_icon.devicon-react-plain
-							//- li.layer.large(data-depth="1.00")
-							//- 	i.layer_icon.large_icon.devicon-html5-plain
-							//- 	i.layer_icon.large_icon.devicon-css3-plain
-							//- 	i.layer_icon.large_icon.devicon-javascript-plain
-							//- 	i.layer_icon.large_icon.devicon-jquery-plain
-							//- 	i.layer_icon.large_icon.devicon-git-plain
-							//- 	i.layer_icon.large_icon.devicon-github-plain
-							//- 	i.layer_icon.large_icon.devicon-bitbucket-plain
-							li.layer.small.shadow(data-depth="0.20")
-								i.layer_icon.small_icon.devicon-d3js-plain
-								i.layer_icon.small_icon.devicon-grunt-plain-wordmark
-								i.layer_icon.small_icon.devicon-photoshop-plain
-								i.layer_icon.small_icon.devicon-mysql-plain-wordmark
-								i.layer_icon.small_icon.devicon-rails-plain-wordmark
-								i.layer_icon.small_icon.devicon-ruby-plain-wordmark
-								i.layer_icon.small_icon.devicon-gulp-plain
-							li.layer.medium.shadow(data-depth="0.50")
-								i.layer_icon.medium_icon.devicon-bootstrap-plain-wordmark
-								i.layer_icon.medium_icon.devicon-heroku-plain-wordmark
-								i.layer_icon.medium_icon.devicon-less-plain-wordmark
-								i.layer_icon.medium_icon.devicon-nodejs-plain-wordmark
-								i.layer_icon.medium_icon.devicon-sass-plain
-								i.layer_icon.medium_icon.devicon-mongodb-plain-wordmark
-								i.layer_icon.medium_icon.devicon-react-plain-wordmark
-							li.layer.large.shadow(data-depth="0.90")
-								i.layer_icon.large_icon.devicon-html5-plain-wordmark
-								i.layer_icon.large_icon.devicon-css3-plain-wordmark
-								i.layer_icon.large_icon.devicon-javascript-plain
-								i.layer_icon.large_icon.devicon-jquery-plain-wordmark
-								i.layer_icon.large_icon.devicon-git-plain-wordmark
-								i.layer_icon.large_icon.devicon-github-plain-wordmark
-								i.layer_icon.large_icon.devicon-bitbucket-plain-wordmark
-							//- li.layer.small.shadow(data-depth="0.10")
-							//- 	i.layer_icon.small_icon.devicon-d3js-plain
-							//- 	i.layer_icon.small_icon.devicon-grunt-plain-wordmark
-							//- 	i.layer_icon.small_icon.devicon-photoshop-plain
-							//- 	i.layer_icon.small_icon.devicon-mysql-plain-wordmark
-							//- 	i.layer_icon.small_icon.devicon-rails-plain-wordmark
-							//- 	i.layer_icon.small_icon.devicon-ruby-plain-wordmark
-							//- 	i.layer_icon.small_icon.devicon-gulp-plain
-							//- li.layer.medium.shadow(data-depth="0.40")
-							//- 	i.layer_icon.medium_icon.devicon-bootstrap-plain-wordmark
-							//- 	i.layer_icon.medium_icon.devicon-heroku-plain-wordmark
-							//- 	i.layer_icon.medium_icon.devicon-less-plain-wordmark
-							//- 	i.layer_icon.medium_icon.devicon-nodejs-plain-wordmark
-							//- 	i.layer_icon.medium_icon.devicon-sass-plain
-							//- 	i.layer_icon.medium_icon.devicon-mongodb-plain-wordmark
-							//- 	i.layer_icon.medium_icon.devicon-react-plain-wordmark
-							//- li.layer.large.shadow(data-depth="0.80")
-							//- 	i.layer_icon.large_icon.devicon-html5-plain-wordmark
-							//- 	i.layer_icon.large_icon.devicon-css3-plain-wordmark
-							//- 	i.layer_icon.large_icon.devicon-javascript-plain
-							//- 	i.layer_icon.large_icon.devicon-jquery-plain-wordmark
-							//- 	i.layer_icon.large_icon.devicon-git-plain-wordmark
-							//- 	i.layer_icon.large_icon.devicon-github-plain-wordmark
-							//- 	i.layer_icon.large_icon.devicon-bitbucket-plain-wordmark
-							li.layer.small(data-depth="0.30")
-								i.layer_icon.small_icon.devicon-d3js-plain
-								i.layer_icon.small_icon.devicon-grunt-plain-wordmark
-								i.layer_icon.small_icon.devicon-photoshop-plain
-								i.layer_icon.small_icon.devicon-mysql-plain-wordmark
-								i.layer_icon.small_icon.devicon-rails-plain-wordmark
-								i.layer_icon.small_icon.devicon-ruby-plain-wordmark
-								i.layer_icon.small_icon.devicon-gulp-plain
-							li.layer.medium(data-depth="0.60")
-								i.layer_icon.medium_icon.devicon-bootstrap-plain-wordmark
-								i.layer_icon.medium_icon.devicon-heroku-plain-wordmark
-								i.layer_icon.medium_icon.devicon-less-plain-wordmark
-								i.layer_icon.medium_icon.devicon-nodejs-plain-wordmark
-								i.layer_icon.medium_icon.devicon-sass-plain
-								i.layer_icon.medium_icon.devicon-mongodb-plain-wordmark
-								i.layer_icon.medium_icon.devicon-react-plain-wordmark
-							li.layer.large(data-depth="1.00")
-								i.layer_icon.large_icon.devicon-html5-plain-wordmark
-								i.layer_icon.large_icon.devicon-css3-plain-wordmark
-								i.layer_icon.large_icon.devicon-javascript-plain
-								i.layer_icon.large_icon.devicon-jquery-plain-wordmark
-								i.layer_icon.large_icon.devicon-git-plain-wordmark
-								i.layer_icon.large_icon.devicon-github-plain-wordmark
-								i.layer_icon.large_icon.devicon-bitbucket-plain-wordmark
-							//- 
-							//- li.layer.small.shadow(data-depth="0.20")
-							//- 	img.layer_icon.small_icon(src="img/d3js-original.svg")
-							//- 	img.layer_icon.small_icon(src="img/grunt-original-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src="img/photoshop.jpg")
-							//- 	img.layer_icon.small_icon(src="img/mysql-original-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src="img/rails-plain-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src="img/ruby-original-wordmark.svg")
-							//- li.layer.medium.shadow(data-depth="0.50")
-							//- 	img.layer_icon.medium_icon(src="img/bootstrap-plain-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src="img/heroku-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src="img/less-plain-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src="img/nodejs-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src="img/sass-original.svg")
-							//- 	img.layer_icon.medium_icon(src="img/mongodb-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src="img/react-original-wordmark.svg")
-							//- li.layer.large.shadow(data-depth="0.90")
-							//- 	img.layer_icon.large_icon(src="img/html5-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src="img/css3-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src="img/javascript-original.svg")
-							//- 	img.layer_icon.large_icon(src="img/jquery-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src="img/git-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src="img/github-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src="img/bitbucket-original-wordmark.svg")
-							//- li.layer.small(data-depth="0.30")
-							//- 	img.layer_icon.small_icon(src=imgpath+"d3js-original.svg")
-							//- 	img.layer_icon.small_icon(src=imgpath+"grunt-original-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src=imgpath+"photoshop.jpg")
-							//- 	img.layer_icon.small_icon(src=imgpath+"mysql-original-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src=imgpath+"rails-plain-wordmark.svg")
-							//- 	img.layer_icon.small_icon(src=imgpath+"ruby-original-wordmark.svg")
-							//- li.layer.medium(data-depth="0.60")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"bootstrap-plain-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"heroku-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"less-plain-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"nodejs-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"sass-original.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"mongodb-original-wordmark.svg")
-							//- 	img.layer_icon.medium_icon(src=imgpath+"react-original-wordmark.svg")
-							//- li.layer.large(data-depth="1.00")
-							//- 	img.layer_icon.large_icon(src=imgpath+"html5-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"css3-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"javascript-original.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"jquery-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"git-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"github-original-wordmark.svg")
-							//- 	img.layer_icon.large_icon(src=imgpath+"bitbucket-original-wordmark.svg")
-							
-				section.section.contact
+					//- .skills
+						//- h2.skills_title Skills
+						//- ul.skills_list
+						//- 	li design
+						//- 	li development
+						//- 	li ui / ux
+						//- 	li responsivity
+						//- 	li cross-browser compatibility
+						//- 	li mobile / desktop
+					.skills_right
+						ul.skills_icons.shadow
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-inkscape-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-mysql-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-github-plain-wordmark
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-ruby-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-css3-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-photoshop-plain
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-jquery-plain-wordmark
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-bootstrap-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-grunt-plain-wordmark
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-heroku-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-sass-plain
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-gulp-plain
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-javascript-plain
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-react-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-html5-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-nodejs-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-git-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-mongodb-plain-wordmark
+							li.layer(data-level="0.5")
+								i.skills_icon.devicon-less-plain-wordmark
+							li.layer(data-level="0.9")
+								i.skills_icon.devicon-bitbucket-plain-wordmark
+							li.layer(data-level="0.1")
+								i.skills_icon.devicon-rails-plain-wordmark
+							li.layer(data-level="0.5")
+								i.skills_icon
+									.skills_iconsvg
+										svg
+											use(xlink:href="#greensock")
+						ul.skills_icons#icons
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-inkscape-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-mysql-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-github-plain-wordmark
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-ruby-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-css3-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-photoshop-plain
+							li.layer(data-level="1")
+								i.skills_icon.devicon-jquery-plain-wordmark
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-bootstrap-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-grunt-plain-wordmark
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-heroku-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-sass-plain
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-gulp-plain
+							li.layer(data-level="1")
+								i.skills_icon.devicon-javascript-plain
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-react-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-html5-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-nodejs-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-git-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-mongodb-plain-wordmark
+							li.layer(data-level="0.6")
+								i.skills_icon.devicon-less-plain-wordmark
+							li.layer(data-level="1")
+								i.skills_icon.devicon-bitbucket-plain-wordmark
+							li.layer(data-level="0.2")
+								i.skills_icon.devicon-rails-plain-wordmark
+							li.layer(data-level="0.6")
+								i.skills_icon
+									.skills_iconsvg
+										svg
+											use(xlink:href="#greensock")
+				section.section.contact#sec3
 					.contact_left
 						.contact_icons
 							h2.contact_title Get in touch
@@ -361,7 +298,7 @@ html(lang="en")
 					.contact_right
 						.contact_form
 							.contact_overlay Thank you! I'll be in touch soon.
-							form#contact_form
+							form#contact_form(autocomplete="off")
 								span.contact_input
 									input.contact_field#input-1(type="text", name="name", required)
 									label.contact_label(for="input-1")

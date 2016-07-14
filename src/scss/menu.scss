@@ -8,11 +8,11 @@ $item-size: $menu-size - 20px;
 	
 	&_wrapper{
 		position: relative;
-		z-index: 2;
+		z-index: 3;
 		transform: rotate(90deg);
 	  height: 60px;
 	  width: 60px;
-	  filter: url(#goo);
+	  filter: url(.#goo);
 	}
 
   &_opener,
@@ -28,31 +28,28 @@ $item-size: $menu-size - 20px;
 	  outline: none;
 	  margin-left: -$menu-size/2;
   	margin-top: -$menu-size/2;
+    background: $menu-bg;
   }
 
   &_btn{
-	  background: $menu-bg;
 	  transition: background .3s ease;
 
 	  &:hover{
 	  	background: $menu-hover;
 	  }
+
+    &.active{
+      background: $menu-active;
+      cursor: normal;
+
+      svg path{
+        fill: $menu-active-text;
+      }
+    }
   }
 
   &_opener{
   	z-index: 9;
-  }
-
-  &_item.active{
-  	
-  	.menu_btn{
-  		background: $menu-active;
-      cursor: normal;
-
-  		svg path{
-  			fill: $menu-active-text;
-  		}
-  	}
   }
 
   &_icon{

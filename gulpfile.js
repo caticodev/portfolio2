@@ -9,7 +9,7 @@ var gulp = require('gulp'),
 	//scripts
 	fixmyjs = require("gulp-fixmyjs"),
 	uglify = require('gulp-uglify'),
-	jquery = require('./jquery-ready.js'),
+	jshint = require('gulp-jshint'),
 
 	//views
 	pug = require('gulp-pug'),
@@ -25,11 +25,18 @@ var gulp = require('gulp'),
 	del = require('del'),
 	concat = require('gulp-concat'),
 	merge = require('merge2'),
-	runSequence = require('run-sequence');
+	runSequence = require('run-sequence'),
+	plumber = require('gulp-plumber');
 
 
 gulp.task('styles', function(){
 	return gulp.src(['src/scss/fonts/imported.css', 'src/scss/fonts/*.css', 'src/scss/reset.css', 'src/scss/*.css', 'src/scss/*.scss'])
+		.pipe(plumber({
+			errorHandler: function (err) {
+        console.log(err);
+    	  this.emit('end');
+    	}
+		}))
 		.pipe(newer('dist/*.css'))
 		.pipe(concat('style.scss'))					// concat to one file
 		.pipe(sass())											// convert sass to css
@@ -50,9 +57,17 @@ gulp.task('scripts', function(){
 
 	var main = gulp.src(['src/js/main/*.js', '!src/js/main/_*.js'])
 			// .pipe(newer('.temp/main.js'))
+			.pipe(jshint())
+			.pipe(jshint.reporter('default'))
 			.pipe(concat('main.js'))
 
 	var merged = merge(plugins, main)
+		.pipe(plumber({
+			errorHandler: function (err) {
+        console.log(err);
+    	  this.emit('end');
+    	}
+		}))
 		.pipe(concat('script.js'))					
 		// .pipe(fixmyjs())
 		// .pipe(uglify())										
@@ -67,6 +82,12 @@ gulp.task('scripts', function(){
 
 gulp.task('views', function(){
 	return gulp.src('src/views/*.pug')
+		.pipe(plumber({
+			errorHandler: function (err) {
+        console.log(err);
+    	  this.emit('end');
+    	}
+		}))
 		.pipe(newer('dist/*.html'))
 		.pipe(pug({ pretty: true }))										
 		.pipe(gulp.dest('dist'))
@@ -75,9 +96,21 @@ gulp.task('views', function(){
 
 gulp.task('images', function(){
   return gulp.src('src/img/**/*.+(png|jpg|jpeg|gif|svg)')
-	  .pipe(cache(imagemin({ interlaced: true })))
-	  .pipe(svgo())
+  	.pipe(plumber({
+			errorHandler: function (err) {
+        console.log(err);
+    	  this.emit('end');
+    	}
+		}))
+	  // .pipe(cache(imagemin({ interlaced: true })))
+	  // .pipe(svgo())
 	  .pipe(gulp.dest('dist/img'))
+	  .pipe(bsync.reload({ stream: true }))
+});
+
+gulp.task('favicon', function(){
+  return gulp.src('src/favicon/*')
+	  .pipe(gulp.dest('dist/favicon'))
 	  .pipe(bsync.reload({ stream: true }))
 });
 
@@ -85,7 +118,8 @@ gulp.task('watch', function(){
 	gulp.watch('src/scss/*', ['styles']);
 	gulp.watch('src/views/*', ['views']);
 	gulp.watch('src/js/**/*', ['scripts']);
-	gulp.watch('src/img/*', ['images']);
+	gulp.watch('src/img/**/*', ['images']);
+	gulp.watch('src/favicon/*', ['favicon']);
 });
 
 gulp.task('clean', function() {
@@ -94,7 +128,7 @@ gulp.task('clean', function() {
 
 gulp.task('build', function (callback) {
   runSequence('clean', 
-    ['styles', 'views', 'scripts', 'images'],
+    ['styles', 'views', 'scripts', 'images', 'favicon'],
     callback
   )
 })

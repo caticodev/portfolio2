@@ -11,7 +11,8 @@ html, body, .wrapper{
 body{
 	-webkit-font-smoothing: antialiased;
 	font-family: 'Raleway';
-	overflow-x: hidden;
+	overflow: hidden;
+	min-width: 320px;
 }
 
 .wrapper{
@@ -23,22 +24,77 @@ body{
 	position: relative;
 }
 
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 50px $input-bg inset; /* Change the color to your own background color */
-  -webkit-text-fill-color: $input-text;
+.section{
+	height: 100%;
+	font-size: 0;
+	position: relative;
 }
 
+input:-webkit-autofill,
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 50px $input-bg inset;
   -webkit-text-fill-color: $input-text;
+}
+
+input:-moz-ui-invalid:not(output),
+textarea:-moz-ui-invalid:not(output) {
+  box-shadow: 0 0 1.5px 1px transparent;
 } 
 
-@media (max-width: $mobile){
-	.wrapper{
-		overflow: auto;
+a, button {
+	outline: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+button:active{
+	padding: 0;
+}
+
+.loader{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 12;
+
+	&_bg{
+		position: absolute;
+		top: 20px;
+		right: 20px;
+		width: 60px;
+		height: 60px;
+	}
+	
+	&_circle{
+		width: calc(150vw + 150vh);
+		height: calc(150vw + 150vh);
+		background: $menu-bg;
+		border-radius: 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 
-	body{
-		font-size: 80%;
+	&_img{
+		position: absolute;
+		z-index: 12;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		// display: none;
+	}
+}
+
+@media screen and (max-width: $mobile), screen and (max-height: $minHeight){
+	.wrapper{
+		overflow-y: scroll;
+	}
+
+	.section{
+		min-height: 100%;
+		height: auto;
 	}
 }

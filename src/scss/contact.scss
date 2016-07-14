@@ -1,42 +1,38 @@
 .contact{
-	// font-size: 100%;
-	background: $contact-bg;
-	padding: 100px 10px 0;
+	// background: $contact-bg;
+	background: linear-gradient(to bottom, #002f2f 0%,#2e2e27 100%);
+	padding: 100px 20px 50px;
+	// padding: 14.6vh 20px 0;
 	position: relative;
 
 	&_overlay{
 		color: $contact-text;
-		background-color: $contact-bg;
 		position: absolute;
-		top: -20px;
 		width: 100%;
-		height: 450px;
 		font-size: 50px;
 		padding: 150px 40px 0;
+		// padding: 22vh 40px 0;
 		font-weight: 200;
 		opacity: 0;
 		transition: opacity 1s ease-out;
-
-		&.done{
-			z-index: 2;
-			opacity: 1;
-		}
 	}
 
 	&_left, 
 	&_right{
 		display: inline-block;
 		vertical-align: top;
-		width: 48%;
+		width: 50%;
 	}
 
 	&_left{
 		text-align: right;
-		margin-right: 4%;
+	}
+
+	&_right{
+		padding-left: 6%;
 	}
 
 	&_icons{
-		max-width: 514px;
 		display: inline-block;
 		text-align: left;
 	}
@@ -45,14 +41,44 @@
 		color: $contact-title;
 		font-family: 'Wire One';
 		font-size: 100px;
-		margin-bottom: 70px;
+		// font-size: 15vh;
+		margin-bottom: 8vh;
 	}
 
 	&_form{
 		font-size: 20px;
 		text-align: center;
 		position: relative;
-		max-width: 500px;
+		max-width: 400px;
+		min-height: 400px;
+		// margin: 0 auto;
+
+		&.done{
+
+			.contact{
+
+				&_input{
+					opacity: 0;
+				}
+
+				&_overlay{
+					z-index: 2;
+					opacity: 1;
+				}
+
+				&_submit{
+					cursor: auto;
+
+					span{
+						transform: rotateX(90deg) translateY(-25px);
+					}
+
+					&:focus{
+						outline: none;
+					}
+				}
+			}
+		}
 	}
 
 	&_input {
@@ -60,9 +86,12 @@
 		z-index: 1;
 		display: inline-block;
 		margin: 1.1em;
+		// margin: 3.3vh 1.1em;
 		max-width: 350px;
+		// max-width: 25.5vw;
 		width: calc(100% - 2em);
 		vertical-align: top;
+		transition: opacity 1s ease-out;
 	}
 
 	&_field {
@@ -71,6 +100,7 @@
 		display: block;
 		float: right;
 		padding: 0.8em;
+		// padding: 2.35vh 0.8em;
 		border: none;
 		border-radius: 0;
 		font-family: 'Raleway';
@@ -103,6 +133,7 @@
 		position: relative;
 		display: block;
 		padding: 0.8em;
+		// padding: 2.35vh;
 		width: 100%;
 		transform-origin: 0% 50%;
 		transition: transform 0.3s;
@@ -114,29 +145,32 @@
 		left: 0;
 		fill: none;
 		transform: scale3d(1, -1, 1);
-		transition: stroke-dashoffset 0.3s;
 		pointer-events: none;
 		width: 100%;
 		height: 100%;
 
 		stroke: $contact-border;
+		// stroke-width: 5px;
 		stroke-width: 4px;
-		stroke-dasharray: 962;
+		stroke-dasharray: 960;
 		stroke-dashoffset: 558;
+		transition: stroke-dashoffset 0.5s;
 	}
 
 	&_submit{
+		display: block;
+		margin: 20px auto 0;
 		line-height: 50px;
 		position: relative;
 		font-family: 'Raleway';
 		color: $contact-text;
 		font-size: 20px;
 		text-transform: uppercase;
-		margin-top: 20px;
 		background: transparent;
 		border: none;
 		cursor: pointer;
 		perspective: 1000px;
+		outline: none;
 
 
 		span{
@@ -175,22 +209,15 @@
 			outline: none;
 		}
 
-		&.done{
-			cursor: auto;
-
-			span{
-				transform: rotateX(90deg) translateY(-25px);
-			}
-
-			&:focus{
-				outline: none;
-			}
+		&:active{
+			padding: 0;
 		}
 	}
 
 	&_msg{
 		resize: none;
 		height: 200px;
+		// height: 29vh;
 		transition: max-height .3s;
 	}
 
@@ -206,37 +233,77 @@
 	}
 
 	.msg{
-		stroke-dasharray: 1406;
-		stroke-dashoffset: 1000;
+		stroke-dasharray: 1965;
+		stroke-dashoffset: 1560;
+		transition: stroke-dashoffset 1s;
 	}
 
-	.contact_field:focus + .contact_label,
-	.filled .contact_label {
-		cursor: default;
-		pointer-events: none;
+	.filled{
+
+		.contact_label {
+			cursor: default;
+			pointer-events: none;
+		}
+
+		.contact_labelName {
+			transform: scale3d(0.81, 0.81, 1) translate3d(-0.8em, -3em, 0);
+			// transform: scale3d(0.81, 0.81, 1) translate3d(-2.35vh, -7.5vh, 0);
+			color: $contact-hover;
+		}
+
+		svg{
+			stroke-dashoffset: 0;
+			transition: stroke-dashoffset 0.5s;
+		}
+
+		.msg{
+			transition: stroke-dashoffset 1s;
+		}
 	}
 
-	.contact_field:focus + .contact_label svg,
-	.filled svg {
-		stroke-dashoffset: 0;
-	}
+	form:invalid{
 
-	.contact_field:focus + .cntact_label .contact_labelName,
-	.filled .contact_labelName {
-		transform: scale3d(0.81, 0.81, 1) translate3d(-0.8em, -3em, 0);
-		color: $contact-hover;
-	}
-
-	.filled .contact_msg{
-		max-height: 200px;
-	}
-
-	.filled .msg{
-		stroke-width: 4px;
+		.contact_submit:hover{
+			animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+		  transform: translate3d(0, 0, 0);
+		  backface-visibility: hidden;
+		  perspective: 1000px;
+		}
 	}
 }
 
-@media (max-width: $mobile){
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@media screen and (max-height: 650px) and (min-width: $mobile){
+	.contact{
+
+		&_msg{
+			height: 150px;
+		}
+
+		&_border.msg{
+			stroke-width: 5px;
+		}
+	}
+}
+
+@media screen and (max-width: $mobile){
 	.contact{
 		padding-top: 50px;
 		padding-bottom: 220px;
@@ -246,6 +313,7 @@
 			width: 100%;
 			text-align: center;
 			margin: 0;
+			padding: 0;
 		}
 
 		&_form{
@@ -257,3 +325,5 @@
 		}
 	}
 }
+
+

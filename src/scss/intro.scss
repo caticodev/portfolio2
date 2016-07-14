@@ -1,8 +1,22 @@
 .intro{
-	background: $intro-bg;
+	// background: $intro-bg;
 	text-align: center;
 	position: relative;
 	font-size: 100%;
+	min-height: 480px;
+
+	&:after{
+		content: '';
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		// background: url('img/triangle.jpg') center / cover no-repeat;
+		// opacity: 0.1;
+		z-index: -1;
+	}
 
 	&_title{
 		font-size: 8em;
@@ -26,24 +40,13 @@
 		left: 50%;
 		transform: translateX(-50%);
 		cursor: pointer;
-		z-index: 1;
+		z-index: 11;
+		text-decoration: none;
 	}
 
-	// &_border{
-	// 	width: 2px;
-	// 	height: 75px;
-	// 	background-color: $intro-border;
-	// 	display: inline-block;
-	// 	margin: 0 40px;
-	// 	vertical-align: middle;
-	// }
-
 	&_text{
-		// margin-left: 120px;
 		position: absolute;
 		top: 60%;
-		// left: 50%;
-		// transform: translateX(-50%);
 		width: 100%;
 		text-align: center;
 	}
@@ -63,12 +66,51 @@
 		// opacity: 0;
 		// animation: arrow 1s infinite;
 
+		svg{
+			max-width: 100%;
+			max-height: 100%;
+		}
+
 		&:nth-child(2){
 			animation-delay: .33s;
 		}
 
 		&:nth-child(3){
 			animation-delay: .66s;
+		}
+	}
+
+	&_bg{
+		position: relative;
+		width: 150%;
+		height: 150%;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		&:after{
+			content: '';
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: $intro-bg;
+			opacity: 0.8;
+		}
+	}
+
+	&_bgImg{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		backface-visibility: hidden;
+		background: url('img/bridge.jpg') 50% 100% / cover no-repeat;
+
+		&.top{
+			opacity: 0.7;
+			position: absolute;
 		}
 	}
 }
@@ -85,8 +127,10 @@
 	}
 }
 
-@media (max-width: $mobile){
+@media screen and (max-width: $mobile), screen and (max-height: $minHeight){
 	.intro{
+		height: 100%;
+		font-size: 13px;
 
 		&_text{
 			top: 55%;

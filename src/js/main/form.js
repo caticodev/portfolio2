@@ -1,5 +1,25 @@
 (function(){
 
+	[].slice.call( document.querySelectorAll( '.contact_field' ) ).forEach( function( inputEl ) {
+
+		if( inputEl.value.trim() !== '' ) {
+			inputEl.parentNode.classList.add('filled');
+		}
+
+		inputEl.addEventListener( 'focus', onInputFocus );
+		inputEl.addEventListener( 'blur', onInputBlur );
+	} );
+
+	function onInputFocus( ev ) {
+		ev.target.parentNode.classList.add('filled');
+	}
+
+	function onInputBlur( ev ) {
+		if( ev.target.value.trim() === '' ) {
+			ev.target.parentNode.classList.remove('filled');
+		}
+	}
+
 	var ajax = {
 		ready: function ready (fn) {
 		  if (typeof fn !== 'function') { return; }
@@ -30,10 +50,8 @@
 		// 	'https://formspree.io/kathy0kate@gmail.com',
 		// 	serialize(ev.target.elements),
 		// 	function(){
-				var btn = document.querySelector('.contact_submit');
-				btn.disabled = true;
-				btn.classList.add('done');
-				document.querySelector('.contact_overlay').classList.add('done');
+				document.querySelector('.contact_submit').disabled = true;
+				document.querySelector(".contact_form").classList.add('done');
 		// 	}
 		// ));
 	});
@@ -41,7 +59,7 @@
 	function serialize(inputs){
 		var data = '';
 		for(var i=0; i<inputs.length; i++){
-			data += inputs[i].name+'='+inputs[i].value+'&' 
+			data += inputs[i].name+'='+inputs[i].value+'&'; 
 		}
 		return data;
 	}
