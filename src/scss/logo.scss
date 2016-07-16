@@ -27,13 +27,13 @@
 		fill: url(.#g443);
 		stroke: url(.#g443);
 		transition: fill .3s ease;
+		stroke-opacity: 0.3;
 	}
 
 	path{
 
 		&.black{
 			fill-opacity: 0.9;
-			stroke-opacity: 0.3;
 		}
 
 		&.white{
@@ -60,30 +60,6 @@
 
 	svg, svg * {
 		pointer-events: none;
-	}
-
-	&.small{
-		transition: opacity .3s;
-
-		&:hover{
-			opacity: 1;
-		}
-
-		.logo{
-
-			&_wrapper:hover{
-				padding: 0;
-			}
-		}
-
-		svg{
-			fill: white;
-			stroke: white;
-		}
-
-		path.black{
-			stroke-opacity: 0.9;
-		}
 	}
 }
 

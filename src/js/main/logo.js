@@ -6,26 +6,16 @@
 		rotate, logo, wrapper, svg, shapes, left, right, paths, interval;
 
 	function Logo(){
-		logo = document.querySelector('.logo');
-		wrapper = document.querySelector('.logo_wrapper');
-		svg = document.querySelector('.logo svg');
-		shapes = [].slice.call(document.querySelectorAll('.shape'));
-		left = [].slice.call(document.querySelectorAll('.left .shape'));
-		right = [].slice.call(document.querySelectorAll('.right .shape'));
-		paths = [].slice.call(document.querySelectorAll('.shape path'));
-
-		this.scale = new TimelineLite({paused: true, onReverseComplete: function(){
-			TweenLite.set(logo, {clearProps: 'all'});
-			TweenLite.set(wrapper, {clearProps: 'all'});
-			TweenLite.set(svg, {clearProps: 'all'});
-		}});
-
-		this.scale
-			.to(logo, 0.8, {width: 'auto', height: 'auto', cursor: 'pointer', className:'+=small'})
-			.to(wrapper, 0.8, {top: '20px', left: '20px', transform: 'none' }, 0)
-			.to(svg, 0.8, {width: 80, height: 80}, 0);
+		logo = document.querySelector('.logo.desktop');
+		wrapper = document.querySelector('.logo.desktop .logo_wrapper');
+		svg = document.querySelector('.logo.desktop svg');
+		shapes = [].slice.call(document.querySelectorAll('.logo.desktop .shape'));
+		left = [].slice.call(document.querySelectorAll('.logo.desktop .left .shape'));
+		right = [].slice.call(document.querySelectorAll('.logo.desktop .right .shape'));
+		paths = [].slice.call(document.querySelectorAll('.logo.desktop .shape path'));
 
 		this.intro = this.intro.bind(this);
+		this.resize = this.resize.bind(this);
 	}
 
 	var rand = function() {
@@ -51,6 +41,34 @@
 		clearInterval(interval);
 	};
 
+	Logo.prototype.resize = function(){
+		if (this.scale) this.scale.kill();
+
+		this.scale = new TimelineLite({paused: true, 
+			// onComplete: function(){
+			// 	TweenLite.set(logo, {width: 'auto', height: 'auto', cursor: 'pointer'});
+			// },
+			onReverseComplete: function(){
+				TweenLite.set(logo, {clearProps: 'all'});
+				TweenLite.set(wrapper, {clearProps: 'all'});
+				TweenLite.set(svg, {clearProps: 'all'});
+		}});
+
+		this.scale
+			.to(logo, 0.8,
+				// {width: '100%', height: '90%', cursor: 'auto'}, 
+				{width: 'auto', height: 'auto', cursor: 'pointer'}, 
+				0)
+			.to(wrapper, 0.8,
+				// {top: '15%', left: '50%', x: '-50%'}, 
+				{top: '20px', left: '20px', x: '0%'}, 
+				0)
+			.to(svg, 0.8,
+				// {width: '41vh', height: '41vh', fill: 'url(.#g443)', stroke: 'url(.#g443)', strokeOpacity: '0.3'}, 
+				{width: 80, height: 80, fill: 'white', stroke: 'white', strokeOpacity: '0.9'}, 
+				0);
+	};
+
 	function animTriangles(){
 		for (var i = 0; i < left.length; i++){
 			TweenLite.to(left[i], 1, {
@@ -70,35 +88,14 @@
 		}
 	}
 
-	// Logo.prototype.logoMouseMove = function(){
-	// 	count++;
-	// 	if (count > 70){
-	// 		for (var i = 0; i < left.length; i++){
-	// 			TweenLite.to(left[i], 1,
-	// 				{x: -rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-	// 				0
-	// 			);
-	// 		}
-	// 		for (var j = 0; j < right.length; j++){
-	// 			TweenLite.to(right[j], 1,
-	// 				{x: rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-	// 				0
-	// 			);
-	// 		}
-	// 		count = 0;
-	// 	}
-	// };
-
 	Logo.prototype.enableHover = function(){
 		wrapper.addEventListener('mouseover', this.logoMouseOver);
 		wrapper.addEventListener('mouseout', this.logoMouseOut);
-		// wrapper.addEventListener('mousemove', this.logoMouseMove);
 	};
 
 	Logo.prototype.disableHover = function(){
 		wrapper.removeEventListener('mouseover', this.logoMouseOver);
 		wrapper.removeEventListener('mouseout', this.logoMouseOut);
-		// wrapper.removeEventListener('mousemove', this.logoMouseMove);
 		this.logoMouseOut();
 	};
 

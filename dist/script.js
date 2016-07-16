@@ -7835,10 +7835,133 @@ function shuffle(a){
   }
 };
 
-// window.addEventListener('resize', function () { 
-//   mobile = (window.innerWidth > 700 ? false : true);
-//   window.location.reload(); 
-// });
+window.addEventListener('resize', function () { 
+  mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
+});
+;(function(window, document, undefined){
+
+	'use strict';
+
+	var container = document.querySelector('.main'),
+		wrapper = document.querySelector('.wrapper'),
+		menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
+		introLink = document.querySelector('.intro_link'),
+		logoLink = document.querySelector('.logo'),
+		animationTime = 1000,
+		lastScroll = 0, index = 0, quietPeriod = 100, start;
+
+	function AutoScroll(fn){
+		this.fn = fn;
+		this.currentSec = 0
+		introLink.addEventListener('click', function(ev){ scrollLink(ev, this, 1); });
+		for (var i=0; i<menuBtns.length; i++){
+			menuBtns[i].addEventListener('click', function(ev){ scrollLink(ev, this, i); });
+		}
+		logoLink.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(0); });
+		devSpecFunc();
+
+		scrollDown = scrollDown.bind(this);
+		onScroll = onScroll.bind(this);
+		swipe = swipe.bind(this);
+	}
+
+	function devSpecFunc(){
+		if (mobile){
+			wrapper.addEventListener('scroll', mobileBtns);
+		} else {
+			document.addEventListener('mousewheel', onScroll);
+			document.addEventListener('DOMMouseScroll', onScroll);
+			document.addEventListener("touchstart",  onTouch);
+		}
+	}
+
+	function scrollLink(ev, el, no){
+		ev.preventDefault(); 
+		mobile ? mobileScroll(el) : scrollDown(no);
+	}
+
+	function mobileBtns(){
+		for (var i=0; i<menuBtns.length; i++){
+			menuBtns[i].classList.remove('active');
+		}
+		for (var i=0; i<menuBtns.length; i++){
+			if (i===3) { menuBtns[i].classList.add('active'); break; }
+			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop) {
+				menuBtns[i].classList.add('active');
+				break;
+			}
+		}
+	}
+
+	function mobileScroll(el){
+		TweenLite.to(wrapper, 1, {
+			scrollTo: {y: document.querySelector(el.getAttribute('href')).offsetTop}, 
+			ease: Circ.easeOut
+		});
+	}
+
+	function onTouch(ev){
+		start = ev.touches[0].pageY;
+		document.addEventListener("touchmove", swipe);
+	}
+
+	function swipe(ev){
+		var delta = start - ev.touches[0].pageY;
+		console.log(delta);
+
+		if (delta > 0){
+			if (index !== 3) index += 1;
+		} else {
+			if (index !== 0) index -= 1;
+		}
+
+		if (index !== this.currentSec) scrollDown(index);
+		document.removeEventListener("touchmove", swipe);
+	}
+	
+	function onScroll(ev){
+		ev.preventDefault();
+		
+		var delta = ev.wheelDelta || -ev.detail,
+				timeNow = new Date().getTime();
+
+		if(timeNow - lastScroll < quietPeriod + animationTime) {
+			ev.preventDefault();
+			return;
+		}
+
+		if (delta < 0) {
+			if (index !== 3) index += 1;
+		} else {
+			if (index !== 0) index -= 1;
+		}
+
+		if (index !== this.currentSec) scrollDown(index);
+		lastScroll = timeNow;
+	}
+
+	var scrollDown = function(no){
+		this.fn["leaveSec"+this.currentSec]();
+		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
+		menuBtns.forEach(function(el, i){
+			i === no ? el.classList.add('active') : el.classList.remove('active');
+		});
+		this.fn["enterSec"+no]();
+		this.currentSec = no;
+		index = no;
+	};
+
+	AutoScroll.prototype.resize = function(){
+		wrapper.removeEventListener('scroll', mobileBtns);
+		document.removeEventListener('mousewheel', onScroll);
+		document.removeEventListener('DOMMouseScroll', onScroll);
+		document.removeEventListener("touchstart",  onTouch);
+		devSpecFunc();
+	};
+
+	window['AutoScroll'] = AutoScroll;
+
+})(window, document);
 (function(){
 
 	[].slice.call( document.querySelectorAll( '.contact_field' ) ).forEach( function( inputEl ) {
@@ -7982,8 +8105,8 @@ function shuffle(a){
 	'use strict';
 	var x, y;
 
-	function ImgTilt(element){
-		this.layers = element;
+	function ImgTilt(){
+		this.layers = [].slice.call(document.querySelectorAll('.intro_bgImg.top'));
 		this.left = this.layers[0].getBoundingClientRect().left;
 		this.top = this.layers[0].getBoundingClientRect().top;
 		this.width = this.layers[0].offsetWidth;
@@ -8005,13 +8128,13 @@ function shuffle(a){
 
 	ImgTilt.prototype.enable = function(){
 		window.addEventListener('mousemove', this.onMouseMove);
-		// window.addEventListener('deviceorientation', this.onDeviceOrientation);
+		window.addEventListener('deviceorientation', this.onDeviceOrientation);
 		this.raf = requestAnimationFrame(this.animate);
 	};
 
 	ImgTilt.prototype.disable = function(){
 		window.removeEventListener('mousemove', this.onMouseMove);
-		// window.removeEventListener('deviceorientation', this.onDeviceOrientation);
+		window.removeEventListener('deviceorientation', this.onDeviceOrientation);
 		cancelAnimationFrame(this.raf);
 	};
 	
@@ -8021,6 +8144,10 @@ function shuffle(a){
 			// w = this.width,
 			// h = this.height,
 			// coords = this.mCoords;
+
+		// for(var i=0; i<this.layers.length; i++){
+		// 	this.layers[i].style.transform = 'perspective(700px) translate3d(' + coords(-15, w, x, i) + 'px,' + coords(-15, h, y, i) + 'px,' + coords(10, h, y, i) + 'px) rotate3d(1,0,0,' + coords(2, h, y, i) + 'deg) rotate3d(0,1,0,' + coords(10, w, x, i) + 'deg)';
+		// }	
 	};
 
 	ImgTilt.prototype.onDeviceOrientation = function(ev){
@@ -8045,6 +8172,11 @@ function shuffle(a){
 		this.raf = requestAnimationFrame(this.animate);
 	}
 
+	ImgTilt.prototype.resize = function(){
+		this.width = this.layers[0].offsetWidth;
+		this.height = this.layers[0].offsetHeight;
+	}
+
 	window['ImgTilt'] = ImgTilt;
 
 })(window, document);
@@ -8056,26 +8188,16 @@ function shuffle(a){
 		rotate, logo, wrapper, svg, shapes, left, right, paths, interval;
 
 	function Logo(){
-		logo = document.querySelector('.logo');
-		wrapper = document.querySelector('.logo_wrapper');
-		svg = document.querySelector('.logo svg');
-		shapes = [].slice.call(document.querySelectorAll('.shape'));
-		left = [].slice.call(document.querySelectorAll('.left .shape'));
-		right = [].slice.call(document.querySelectorAll('.right .shape'));
-		paths = [].slice.call(document.querySelectorAll('.shape path'));
-
-		this.scale = new TimelineLite({paused: true, onReverseComplete: function(){
-			TweenLite.set(logo, {clearProps: 'all'});
-			TweenLite.set(wrapper, {clearProps: 'all'});
-			TweenLite.set(svg, {clearProps: 'all'});
-		}});
-
-		this.scale
-			.to(logo, 0.8, {width: 'auto', height: 'auto', cursor: 'pointer', className:'+=small'})
-			.to(wrapper, 0.8, {top: '20px', left: '20px', transform: 'none' }, 0)
-			.to(svg, 0.8, {width: 80, height: 80}, 0);
+		logo = document.querySelector('.logo.desktop');
+		wrapper = document.querySelector('.logo.desktop .logo_wrapper');
+		svg = document.querySelector('.logo.desktop svg');
+		shapes = [].slice.call(document.querySelectorAll('.logo.desktop .shape'));
+		left = [].slice.call(document.querySelectorAll('.logo.desktop .left .shape'));
+		right = [].slice.call(document.querySelectorAll('.logo.desktop .right .shape'));
+		paths = [].slice.call(document.querySelectorAll('.logo.desktop .shape path'));
 
 		this.intro = this.intro.bind(this);
+		this.resize = this.resize.bind(this);
 	}
 
 	var rand = function() {
@@ -8101,6 +8223,34 @@ function shuffle(a){
 		clearInterval(interval);
 	};
 
+	Logo.prototype.resize = function(){
+		if (this.scale) this.scale.kill();
+
+		this.scale = new TimelineLite({paused: true, 
+			// onComplete: function(){
+			// 	TweenLite.set(logo, {width: 'auto', height: 'auto', cursor: 'pointer'});
+			// },
+			onReverseComplete: function(){
+				TweenLite.set(logo, {clearProps: 'all'});
+				TweenLite.set(wrapper, {clearProps: 'all'});
+				TweenLite.set(svg, {clearProps: 'all'});
+		}});
+
+		this.scale
+			.to(logo, 0.8,
+				// {width: '100%', height: '90%', cursor: 'auto'}, 
+				{width: 'auto', height: 'auto', cursor: 'pointer'}, 
+				0)
+			.to(wrapper, 0.8,
+				// {top: '15%', left: '50%', x: '-50%'}, 
+				{top: '20px', left: '20px', x: '0%'}, 
+				0)
+			.to(svg, 0.8,
+				// {width: '41vh', height: '41vh', fill: 'url(.#g443)', stroke: 'url(.#g443)', strokeOpacity: '0.3'}, 
+				{width: 80, height: 80, fill: 'white', stroke: 'white', strokeOpacity: '0.9'}, 
+				0);
+	};
+
 	function animTriangles(){
 		for (var i = 0; i < left.length; i++){
 			TweenLite.to(left[i], 1, {
@@ -8120,35 +8270,14 @@ function shuffle(a){
 		}
 	}
 
-	// Logo.prototype.logoMouseMove = function(){
-	// 	count++;
-	// 	if (count > 70){
-	// 		for (var i = 0; i < left.length; i++){
-	// 			TweenLite.to(left[i], 1,
-	// 				{x: -rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-	// 				0
-	// 			);
-	// 		}
-	// 		for (var j = 0; j < right.length; j++){
-	// 			TweenLite.to(right[j], 1,
-	// 				{x: rand()*30, scale: rand(), svgOrigin:'125 125', ease: Expo.easeOut},
-	// 				0
-	// 			);
-	// 		}
-	// 		count = 0;
-	// 	}
-	// };
-
 	Logo.prototype.enableHover = function(){
 		wrapper.addEventListener('mouseover', this.logoMouseOver);
 		wrapper.addEventListener('mouseout', this.logoMouseOut);
-		// wrapper.addEventListener('mousemove', this.logoMouseMove);
 	};
 
 	Logo.prototype.disableHover = function(){
 		wrapper.removeEventListener('mouseover', this.logoMouseOver);
 		wrapper.removeEventListener('mouseout', this.logoMouseOut);
-		// wrapper.removeEventListener('mousemove', this.logoMouseMove);
 		this.logoMouseOut();
 	};
 
@@ -8164,11 +8293,19 @@ function shuffle(a){
 	var fn = {},
 		logo = new Logo(),
 		iconspar = new Icons(),
-		// parallax = new Parallax(document.getElementById('icons')),
-		imgTilt = new ImgTilt([].slice.call(document.querySelectorAll('.intro_bgImg.top')));
+		scroll = new AutoScroll(fn)
+		imgTilt = new ImgTilt();
 	
 	logo.enableHover();
+	logo.resize();
 	imgTilt.enable();
+	if (mobile) iconspar.enable();
+	
+	window.addEventListener('resize', function(){
+		logo.resize();
+		imgTilt.resize();
+		scroll.resize();
+	});
 
 // loading
 	window.addEventListener('load', function(){
@@ -8186,122 +8323,20 @@ function shuffle(a){
 	});
 //
 
-// intro animation
-	var introText = [].slice.call(document.querySelectorAll('.intro_title, .intro_subtitle, .intro_link'));
-
-	function animIntro(){
-		TweenMax.staggerFrom(introText, 1, {y: +300, opacity: 0, ease: Expo.easeOut}, 0.1);
-	}
-//
-
-
-//auto scroll
-	var container = document.querySelector('.main'),
-			wrapper = document.querySelector('.wrapper'),
-			menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
-			introLink = document.querySelector('.intro_link'),
-			animationTime = 1000,
-			lastScroll = 0, currentSec = 0, index = 0; quietPeriod = 100;
-
-	if (mobile){
-		iconspar.enable();
-		introLink.addEventListener('click', mobileScroll);
-		menuBtns.forEach(function(el, i){
-			el.addEventListener('click', mobileScroll);
-		});
-		wrapper.addEventListener('scroll', function(ev){
-			menuBtns.forEach(function(el, i){
-				el.classList.remove('active');
-			});	
-			if (wrapper.scrollTop < document.querySelector(menuBtns[1].getAttribute('href')).offsetTop) {
-				menuBtns[0].classList.add('active');	
-			} else if (wrapper.scrollTop < document.querySelector(menuBtns[2].getAttribute('href')).offsetTop) {
-				menuBtns[1].classList.add('active');
-			} else if (wrapper.scrollTop < document.querySelector(menuBtns[3].getAttribute('href')).offsetTop) {
-				menuBtns[2].classList.add('active');
-			} else {
-				menuBtns[3].classList.add('active');
-			}
-		})
-	} else {
-		document.addEventListener('mousewheel', onScroll);
-		document.addEventListener('DOMMouseScroll', onScroll);
-		document.addEventListener("touchstart",  onTouch);
-		introLink.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(1); });
-		menuBtns.forEach(function(el, i){
-			el.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(i); });
-		});
-	}
-
-	function mobileScroll(ev){
-		ev.preventDefault();
-		pos = document.querySelector(this.getAttribute('href')).offsetTop;
-		TweenLite.to(wrapper, 1, {scrollTo: {y: pos}, ease: Circ.easeOut});
-	}
-
-	var start;
-
-	function onTouch(ev){
-		start = ev.touches[0].pageY;
-		document.addEventListener("touchmove", swipe);
-	}
-
-	function swipe(ev){
-		var delta = start - ev.touches[0].pageY;
-		console.log(delta);
-
-		if (delta > 0){
-			if (index !== 3) index += 1;
-		} else {
-			if (index !== 0) index -= 1;
-		}
-
-		if (index !== currentSec) scrollDown(index);
-		document.removeEventListener("touchmove", swipe);
-	}
-	
-	function onScroll(ev){
-		ev.preventDefault();
-		
-		var delta = ev.wheelDelta || -ev.detail,
-				timeNow = new Date().getTime();
-
-		if(timeNow - lastScroll < quietPeriod + animationTime) {
-			ev.preventDefault();
-			return;
-		}
-
-		if (delta < 0) {
-			if (index !== 3) index += 1;
-		} else {
-			if (index !== 0) index -= 1;
-		}
-
-		if (index !== currentSec) scrollDown(index);
-		lastScroll = timeNow;
-	}
-
-	var scrollDown = function(no){
-		fn["leaveSec"+currentSec]();
-		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
-		menuBtns.forEach(function(el, i){
-			i === no ? el.classList.add('active') : el.classList.remove('active');
-		});
-		fn["enterSec"+no]();
-		currentSec = no;
-		index = no;
-	};
-//
-
 // section specific animations
 	var projects = [].slice.call(document.querySelectorAll('.proj_list li')),
 		menu = document.querySelector('.menu'),
+		introText = [].slice.call(document.querySelectorAll('.intro_title, .intro_subtitle, .intro_link')),
 		skills = [].slice.call(document.querySelectorAll('.skills_title, .skills_list li')),
 		icons = [].slice.call(document.querySelectorAll('.skills_icon')),
 		links = [].slice.call(document.querySelectorAll('.contact_title, .icons_el')),
 		form = [].slice.call(document.querySelectorAll('.contact_input, .contact_submit'));
 
 	shuffle(icons);
+
+	function animIntro(){
+		TweenMax.staggerFrom(introText, 1, {y: +300, opacity: 0, ease: Expo.easeOut}, 0.1);
+	}
 
 	fn.enterSec0 = function(){
 		logo.scale.reverse();
@@ -8324,7 +8359,7 @@ function shuffle(a){
 	};
 
 	fn.enterSec2 = function(){
-		TweenMax.staggerFrom(skills, 1, {x: '-=500', opacity: 0, ease: Circ.easeOut}, 0.05);
+		TweenMax.staggerFrom(skills, 1, {x: '-=500', opacity: 0, ease: Circ.easeOut, clearProps: 'transform'}, 0.05);
 		TweenMax.staggerFrom(icons, 1, {scale: 0, ease: Back.easeOut}, 0.05);
 		iconspar.enable();
 	};

@@ -3,8 +3,8 @@
 	'use strict';
 	var x, y;
 
-	function ImgTilt(element){
-		this.layers = element;
+	function ImgTilt(){
+		this.layers = [].slice.call(document.querySelectorAll('.intro_bgImg.top'));
 		this.left = this.layers[0].getBoundingClientRect().left;
 		this.top = this.layers[0].getBoundingClientRect().top;
 		this.width = this.layers[0].offsetWidth;
@@ -26,13 +26,13 @@
 
 	ImgTilt.prototype.enable = function(){
 		window.addEventListener('mousemove', this.onMouseMove);
-		// window.addEventListener('deviceorientation', this.onDeviceOrientation);
+		window.addEventListener('deviceorientation', this.onDeviceOrientation);
 		this.raf = requestAnimationFrame(this.animate);
 	};
 
 	ImgTilt.prototype.disable = function(){
 		window.removeEventListener('mousemove', this.onMouseMove);
-		// window.removeEventListener('deviceorientation', this.onDeviceOrientation);
+		window.removeEventListener('deviceorientation', this.onDeviceOrientation);
 		cancelAnimationFrame(this.raf);
 	};
 	
@@ -42,6 +42,10 @@
 			// w = this.width,
 			// h = this.height,
 			// coords = this.mCoords;
+
+		// for(var i=0; i<this.layers.length; i++){
+		// 	this.layers[i].style.transform = 'perspective(700px) translate3d(' + coords(-15, w, x, i) + 'px,' + coords(-15, h, y, i) + 'px,' + coords(10, h, y, i) + 'px) rotate3d(1,0,0,' + coords(2, h, y, i) + 'deg) rotate3d(0,1,0,' + coords(10, w, x, i) + 'deg)';
+		// }	
 	};
 
 	ImgTilt.prototype.onDeviceOrientation = function(ev){
@@ -64,6 +68,11 @@
 			this.layers[i].style.transform = 'perspective(700px) translate3d(' + coords(-15, w, x, i) + 'px,' + coords(-15, h, y, i) + 'px,' + coords(10, h, y, i) + 'px) rotate3d(1,0,0,' + coords(2, h, y, i) + 'deg) rotate3d(0,1,0,' + coords(10, w, x, i) + 'deg)';
 		}	
 		this.raf = requestAnimationFrame(this.animate);
+	}
+
+	ImgTilt.prototype.resize = function(){
+		this.width = this.layers[0].offsetWidth;
+		this.height = this.layers[0].offsetHeight;
 	}
 
 	window['ImgTilt'] = ImgTilt;

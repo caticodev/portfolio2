@@ -10,7 +10,6 @@ function shuffle(a){
   }
 };
 
-// window.addEventListener('resize', function () { 
-//   mobile = (window.innerWidth > 700 ? false : true);
-//   window.location.reload(); 
-// });
+window.addEventListener('resize', function () { 
+  mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
+});
