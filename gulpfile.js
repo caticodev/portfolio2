@@ -37,7 +37,7 @@ gulp.task('styles', function(){
     	  this.emit('end');
     	}
 		}))
-		.pipe(newer('dist/*.css'))
+		.pipe(newer('*.css'))
 		.pipe(concat('style.scss'))					// concat to one file
 		.pipe(sass())											// convert sass to css
 		// .pipe(csslint())									// check for errors
@@ -46,7 +46,7 @@ gulp.task('styles', function(){
 		// .pipe(uncss('index.html'))				// remove unused css
 		.pipe(autoprefixer())							// add prefixes
 		.pipe(csso())											// minify
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }))
 });
 
@@ -71,7 +71,7 @@ gulp.task('scripts', function(){
 		.pipe(concat('script.js'))					
 		// .pipe(fixmyjs())
 		.pipe(uglify())										
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }));
 
 	plugins.pipe(gulp.dest('.temp'));
@@ -88,9 +88,9 @@ gulp.task('views', function(){
     	  this.emit('end');
     	}
 		}))
-		.pipe(newer('dist/*.html'))
+		.pipe(newer('*.html'))
 		.pipe(pug({ pretty: true }))										
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }))
 });
 
@@ -104,13 +104,13 @@ gulp.task('images', function(){
 		}))
 	  // .pipe(cache(imagemin({ interlaced: true })))
 	  // .pipe(svgo())
-	  .pipe(gulp.dest('dist/img'))
+	  .pipe(gulp.dest('img'))
 	  .pipe(bsync.reload({ stream: true }))
 });
 
 gulp.task('favicon', function(){
   return gulp.src('src/favicon/*')
-	  .pipe(gulp.dest('dist/favicon'))
+	  .pipe(gulp.dest('favicon'))
 	  .pipe(bsync.reload({ stream: true }))
 });
 
@@ -141,7 +141,7 @@ gulp.task('default', function (callback) {
 
 gulp.task('bsync', function(){
 	bsync.init({
-		server: { baseDir: 'dist'}
+		server: { baseDir: './'}
 	})
 });
 
