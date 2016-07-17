@@ -36,6 +36,7 @@
 	var projects = [].slice.call(document.querySelectorAll('.proj_list li')),
 		menu = document.querySelector('.menu'),
 		introText = [].slice.call(document.querySelectorAll('.intro_title, .intro_subtitle, .intro_link')),
+		arrows = [].slice.call(document.querySelectorAll('.intro_arrow')),
 		skills = [].slice.call(document.querySelectorAll('.skills_title, .skills_list li')),
 		icons = [].slice.call(document.querySelectorAll('.skills_icon')),
 		links = [].slice.call(document.querySelectorAll('.contact_title, .icons_el')),
@@ -45,6 +46,7 @@
 
 	function animIntro(){
 		TweenMax.staggerFrom(introText, 1, {y: +300, opacity: 0, ease: Expo.easeOut}, 0.1);
+		TweenMax.staggerFrom(arrows, 0.5, {opacity: 0, repeat: -1, yoyo: true}, 0.6);
 	}
 
 	fn.enterSec0 = function(){

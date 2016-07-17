@@ -61,8 +61,10 @@
 	&_arrow{
 		width: 20px;
 		height: 10px;
-		opacity: 0;
-		animation: arrow 1s infinite;
+		transform: translateZ(0.01);
+		backface-visibility: hidden;
+		// opacity: 0;
+		// animation: arrow 1s infinite;
 
 		svg{
 			max-width: 100%;
