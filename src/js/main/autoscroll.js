@@ -8,11 +8,10 @@
 		introLink = document.querySelector('.intro_link'),
 		logoLink = document.querySelector('.logo'),
 		animationTime = 1000,
-		lastScroll = 0, index = 0, quietPeriod = 100, start;
+		lastScroll = 0, index = 0, currentSec = 0, quietPeriod = 100, start;
 
 	function AutoScroll(fn){
 		this.fn = fn;
-		this.currentSec = 0
 		introLink.addEventListener('click', function(ev){ scrollLink(ev, this, 1); });
 		for (var i=0; i<menuBtns.length; i++){
 			menuBtns[i].addEventListener('click', function(ev){ scrollLink(ev, this, i); });
@@ -75,7 +74,7 @@
 			if (index !== 0) index -= 1;
 		}
 
-		if (index !== this.currentSec) scrollDown(index);
+		if (index !== currentSec) scrollDown(index);
 		document.removeEventListener("touchmove", swipe);
 	}
 	
@@ -96,18 +95,18 @@
 			if (index !== 0) index -= 1;
 		}
 
-		if (index !== this.currentSec) scrollDown(index);
+		if (index !== currentSec) scrollDown(index);
 		lastScroll = timeNow;
 	}
 
 	var scrollDown = function(no){
-		this.fn["leaveSec"+this.currentSec]();
+		this.fn["leaveSec"+currentSec]();
 		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
 		menuBtns.forEach(function(el, i){
 			i === no ? el.classList.add('active') : el.classList.remove('active');
 		});
 		this.fn["enterSec"+no]();
-		this.currentSec = no;
+		currentSec = no;
 		index = no;
 	};
 

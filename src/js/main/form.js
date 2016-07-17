@@ -45,15 +45,15 @@
 
 	document.getElementById("contact_form").addEventListener("submit", function(ev){
 		ev.preventDefault();
-		// ajax.ready(ajax.req(
-		// 	'POST', 
-		// 	'https://formspree.io/kathy0kate@gmail.com',
-		// 	serialize(ev.target.elements),
-		// 	function(){
+		ajax.ready(ajax.req(
+			'POST', 
+			'https://formspree.io/hello@catico.xyz',
+			serialize(ev.target.elements),
+			function(){
 				document.querySelector('.contact_submit').disabled = true;
 				document.querySelector(".contact_form").classList.add('done');
-		// 	}
-		// ));
+			}
+		));
 	});
 
 	function serialize(inputs){

@@ -46,7 +46,7 @@
 
 	function animIntro(){
 		TweenMax.staggerFrom(introText, 1, {y: +300, opacity: 0, ease: Expo.easeOut}, 0.1);
-		TweenMax.staggerFrom(arrows, 0.5, {opacity: 0, repeat: -1, yoyo: true}, 0.6);
+		// TweenMax.staggerFrom(arrows, 0.5, {opacity: 0, repeat: -1, yoyo: true}, 0.6);
 	}
 
 	fn.enterSec0 = function(){
