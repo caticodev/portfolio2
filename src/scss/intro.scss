@@ -43,10 +43,9 @@
 
 	&_text{
 		position: absolute;
-		top: 60%;
+		bottom: 80px;
 		width: 100%;
 		text-align: center;
-		margin-top: 1vh;
 	}
 
 	&_arrows{
@@ -64,8 +63,8 @@
 		transform: translateZ(0.01);
 		backface-visibility: hidden;
 		background: url('img/arrow.png');
-		opacity: 0;
-		animation: arrow 1s infinite;
+		// opacity: 0;
+		// animation: arrow 1s infinite;
 
 		svg{
 			max-width: 100%;
@@ -134,7 +133,7 @@
 		font-size: 13px;
 
 		&_text{
-			top: 55%;
+			// top: 55%;
 		}
 	}
 }
