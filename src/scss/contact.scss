@@ -270,6 +270,22 @@
 		  perspective: 1000px;
 		}
 	}
+
+	&_error{
+		position: absolute;
+		bottom: -25px;
+		right: 0;
+		color: $contact-hover;
+		padding: 5px;
+		font-size: 13px;
+		opacity: 0;
+		transition: opacity 0.3s;
+		font-weight: 700;
+	}
+
+	&_field:invalid + .contact_error.show{
+		opacity: 1;
+	}
 }
 
 @keyframes shake {

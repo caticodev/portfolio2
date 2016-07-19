@@ -10,11 +10,24 @@
 	imgTilt.enable();
 	if (mobile) iconspar.enable();
 	
-	window.addEventListener('resize', function(){
-		logo.resize();
+	window.addEventListener('resize', onResize);
+
+	function onResize(){
+		mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
+		
 		imgTilt.resize();
-		scroll.resize();
-	});
+		if (mobile) {
+			scroll.enableMobile();
+		} else {
+			scroll.enableDesktop();
+			logo.resize();
+			if (currentSec === 0){
+				logo.scale.reverse();
+			} else {
+				logo.scale.play();
+			}
+		}
+	}
 
 // loading
 	window.addEventListener('load', function(){
@@ -29,6 +42,8 @@
 			.set(loader, {display: 'none'})
 			.addCallback(logo.intro, 2)
 			.addCallback(animIntro, 2)
+
+		onResize();
 	});
 //
 

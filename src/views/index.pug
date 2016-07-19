@@ -301,21 +301,24 @@ html(lang="en")
 					.contact_right
 						.contact_form
 							.contact_overlay Thank you! I'll be in touch soon.
-							form#contact_form(autocomplete="off")
+							form#contact_form(autocomplete="off", novalidate)
 								span.contact_input
 									input.contact_field#input-1(type="text", name="name", required)
+									.contact_error(data-name="name") Please provide your name
 									label.contact_label(for="input-1")
 										svg.contact_border
 											use(xlink:href="#input")
 										span.contact_labelName Name
 								span.contact_input
-									input.contact_field#input-2(type="email", name="_reply_to", required)
+									input.contact_field#input-2(type="email", name="_reply_to", pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", required)
+									.contact_error(data-name="_reply_to") Please provide a valid email address
 									label.contact_label(for="input-2")
 										svg.contact_border
 											use(xlink:href="#input")
 										span.contact_labelName Email
 								span.contact_input
 									textarea.contact_field.contact_msg#input-3(name="message", required)
+									.contact_error(data-name="message") Please provide a message
 									label.contact_label(for="input-3")
 										svg.contact_border.msg
 											use(xlink:href="#textarea")

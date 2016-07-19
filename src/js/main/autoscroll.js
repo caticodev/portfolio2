@@ -6,32 +6,21 @@
 		wrapper = document.querySelector('.wrapper'),
 		menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
 		introLink = document.querySelector('.intro_link'),
-		logoLink = document.querySelector('.logo'),
+		logoLink = document.querySelector('.logo_wrapper'),
 		animationTime = 1000,
-		lastScroll = 0, index = 0, currentSec = 0, quietPeriod = 100, start;
+		lastScroll = 0, index = 0, quietPeriod = 100, start;
 
 	function AutoScroll(fn){
 		this.fn = fn;
 		introLink.addEventListener('click', function(ev){ scrollLink(ev, this, 1); });
-		for (var i=0; i<menuBtns.length; i++){
-			menuBtns[i].addEventListener('click', function(ev){ scrollLink(ev, this, i); });
-		}
+		menuBtns.forEach(function(el, i){
+			el.addEventListener('click', function(ev){ scrollLink(ev, this, i); });
+		});
 		logoLink.addEventListener('click', function(ev){ ev.preventDefault(); scrollDown(0); });
-		devSpecFunc();
 
 		scrollDown = scrollDown.bind(this);
 		onScroll = onScroll.bind(this);
 		swipe = swipe.bind(this);
-	}
-
-	function devSpecFunc(){
-		if (mobile){
-			wrapper.addEventListener('scroll', mobileBtns);
-		} else {
-			document.addEventListener('mousewheel', onScroll);
-			document.addEventListener('DOMMouseScroll', onScroll);
-			document.addEventListener("touchstart",  onTouch);
-		}
 	}
 
 	function scrollLink(ev, el, no){
@@ -40,13 +29,14 @@
 	}
 
 	function mobileBtns(){
-		for (var i=0; i<menuBtns.length; i++){
-			menuBtns[i].classList.remove('active');
+		for (var j=0; j<menuBtns.length; j++){
+			menuBtns[j].classList.remove('active');
 		}
 		for (var i=0; i<menuBtns.length; i++){
 			if (i===3) { menuBtns[i].classList.add('active'); break; }
 			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop) {
 				menuBtns[i].classList.add('active');
+				currentSec = i;
 				break;
 			}
 		}
@@ -64,9 +54,8 @@
 		document.addEventListener("touchmove", swipe);
 	}
 
-	function swipe(ev){
+	var swipe = function(ev){
 		var delta = start - ev.touches[0].pageY;
-		console.log(delta);
 
 		if (delta > 0){
 			if (index !== 3) index += 1;
@@ -76,10 +65,12 @@
 
 		if (index !== currentSec) scrollDown(index);
 		document.removeEventListener("touchmove", swipe);
-	}
+	};
 	
-	function onScroll(ev){
+	var onScroll = function(ev){
 		ev.preventDefault();
+
+		index = currentSec;
 		
 		var delta = ev.wheelDelta || -ev.detail,
 				timeNow = new Date().getTime();
@@ -97,25 +88,35 @@
 
 		if (index !== currentSec) scrollDown(index);
 		lastScroll = timeNow;
-	}
+	};
 
 	var scrollDown = function(no){
 		this.fn["leaveSec"+currentSec]();
 		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
-		menuBtns.forEach(function(el, i){
-			i === no ? el.classList.add('active') : el.classList.remove('active');
-		});
+		for (var i=0; i<menuBtns.length; i++){
+			i === no ? menuBtns[i].classList.add('active') : menuBtns[i].classList.remove('active');
+		}
 		this.fn["enterSec"+no]();
 		currentSec = no;
 		index = no;
 	};
 
-	AutoScroll.prototype.resize = function(){
-		wrapper.removeEventListener('scroll', mobileBtns);
+	AutoScroll.prototype.enableMobile = function(){
 		document.removeEventListener('mousewheel', onScroll);
 		document.removeEventListener('DOMMouseScroll', onScroll);
 		document.removeEventListener("touchstart",  onTouch);
-		devSpecFunc();
+		TweenLite.set(container, {y: '0%'});
+		TweenLite.set(wrapper, {scrollTo: {y: document.querySelector(menuBtns[currentSec].getAttribute('href')).offsetTop}});
+		wrapper.addEventListener('scroll', mobileBtns);
+	};
+
+	AutoScroll.prototype.enableDesktop = function(){
+		wrapper.removeEventListener('scroll', mobileBtns);
+		wrapper.scrollTop = 0;
+		TweenLite.set(container, {y: -100*currentSec + '%'});
+		document.addEventListener('mousewheel', onScroll);
+		document.addEventListener('DOMMouseScroll', onScroll);
+		document.addEventListener("touchstart",  onTouch);
 	};
 
 	window['AutoScroll'] = AutoScroll;

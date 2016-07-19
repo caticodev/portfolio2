@@ -150,7 +150,6 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		// pointer-events: none;
 		background-color: $proj-overlay;
 		z-index: 10;
 	}
@@ -233,7 +232,7 @@
 		transform: rotate3d(0, 0, 0, 0deg);
 	}
 	to {
-		transform: rotate3d(-1, 0, 0, 130deg);
+		transform: rotate3d(-1, 0, 0, 140deg);
 	}
 }
 @keyframes out-right {
@@ -241,7 +240,7 @@
 		transform: rotate3d(0, 0, 0, 0deg);
 	}
 	to {
-		transform: rotate3d(0, -1, 0, 130deg);
+		transform: rotate3d(0, -1, 0, 140deg);
 	}
 }
 @keyframes out-bottom {
@@ -249,7 +248,7 @@
 		transform: rotate3d(0, 0, 0, 0deg);
 	}
 	to {
-		transform: rotate3d(1, 0, 0, 130deg);
+		transform: rotate3d(1, 0, 0, 140deg);
 	}
 }
 @keyframes out-left {
@@ -257,7 +256,7 @@
 		transform: rotate3d(0, 0, 0, 0deg);
 	}
 	to {
-		transform: rotate3d(0, 1, 0, 130deg);
+		transform: rotate3d(0, 1, 0, 140deg);
 	}
 }
 

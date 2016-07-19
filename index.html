@@ -453,20 +453,23 @@
           <div class="contact_right">
             <div class="contact_form">
               <div class="contact_overlay">Thank you! I'll be in touch soon.</div>
-              <form id="contact_form" autocomplete="off"><span class="contact_input">
+              <form id="contact_form" autocomplete="off" novalidate><span class="contact_input">
                   <input class="contact_field" id="input-1" type="text" name="name" required>
+                  <div class="contact_error" data-name="name">Please provide your name</div>
                   <label class="contact_label" for="input-1">
                     <svg class="contact_border">
                       <use xlink:href="#input"></use>
                     </svg><span class="contact_labelName">Name</span>
                   </label></span><span class="contact_input">
-                  <input class="contact_field" id="input-2" type="email" name="_reply_to" required>
+                  <input class="contact_field" id="input-2" type="email" name="_reply_to" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$" required>
+                  <div class="contact_error" data-name="_reply_to">Please provide a valid email address</div>
                   <label class="contact_label" for="input-2">
                     <svg class="contact_border">
                       <use xlink:href="#input"></use>
                     </svg><span class="contact_labelName">Email</span>
                   </label></span><span class="contact_input">
                   <textarea class="contact_field contact_msg" id="input-3" name="message" required></textarea>
+                  <div class="contact_error" data-name="message">Please provide a message</div>
                   <label class="contact_label" for="input-3">
                     <svg class="contact_border msg">
                       <use xlink:href="#textarea"></use>

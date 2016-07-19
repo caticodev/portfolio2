@@ -1,4 +1,5 @@
-var mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
+var mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false),
+	currentSec = 0;
 
 function shuffle(a){
 	var j, x, i;
@@ -9,7 +10,3 @@ function shuffle(a){
     a[j] = x;
   }
 };
-
-window.addEventListener('resize', function () { 
-  mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
-});

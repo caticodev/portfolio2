@@ -1,21 +1,19 @@
 (function(){
 
-	[].slice.call( document.querySelectorAll( '.contact_field' ) ).forEach( function( inputEl ) {
+	var fields = [].slice.call(document.querySelectorAll('.contact_field'));
 
-		if( inputEl.value.trim() !== '' ) {
-			inputEl.parentNode.classList.add('filled');
-		}
+	fields.forEach(function(inputEl){
+		if(inputEl.value.trim() !== '') inputEl.parentNode.classList.add('filled');
+		inputEl.addEventListener('focus', onInputFocus);
+		inputEl.addEventListener('blur', onInputBlur);
+	});
 
-		inputEl.addEventListener( 'focus', onInputFocus );
-		inputEl.addEventListener( 'blur', onInputBlur );
-	} );
-
-	function onInputFocus( ev ) {
+	function onInputFocus(ev) {
 		ev.target.parentNode.classList.add('filled');
 	}
 
-	function onInputBlur( ev ) {
-		if( ev.target.value.trim() === '' ) {
+	function onInputBlur(ev) {
+		if(ev.target.value.trim() === '') {
 			ev.target.parentNode.classList.remove('filled');
 		}
 	}
@@ -45,16 +43,36 @@
 
 	document.getElementById("contact_form").addEventListener("submit", function(ev){
 		ev.preventDefault();
-		ajax.ready(ajax.req(
-			'POST', 
-			'https://formspree.io/hello@catico.xyz',
-			serialize(ev.target.elements),
-			function(){
-				document.querySelector('.contact_submit').disabled = true;
-				document.querySelector(".contact_form").classList.add('done');
-			}
-		));
+		if (validate()){
+			ajax.ready(ajax.req(
+				'POST', 
+				'https://formspree.io/hello@catico.xyz',
+				serialize(ev.target.elements),
+				function(){
+					document.querySelector('.contact_submit').disabled = true;
+					document.querySelector(".contact_form").classList.add('done');
+				}
+			));
+		}
 	});
+
+	function validate(){
+		for (var i=0; i<fields.length; i++){
+			input = fields[i].value.trim();
+			msg = document.querySelector('.contact_error[data-name="'+fields[i].name+'"');
+			if (input === '' || (i===1 && !email(input))){
+				msg.classList.add('show');
+				break;
+			} else{
+				msg.classList.remove('show');
+			}
+		}
+	}
+
+	function email(address){
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(address);
+	}
 
 	function serialize(inputs){
 		var data = '';
