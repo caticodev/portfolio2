@@ -8026,6 +8026,7 @@ function shuffle(a){
 				break;
 			} else{
 				msg.classList.remove('show');
+				if (i===fields.length-1) return true;
 			}
 		}
 	}
