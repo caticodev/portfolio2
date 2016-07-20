@@ -1,11 +1,17 @@
 (function(){
 	var $menuBtn = [].slice.call(document.querySelectorAll(".menu_btn")),
-			$burger = document.querySelector(".menu_opener"),
-			$menu = document.querySelector(".menu"),
-			$burgerIcon = $burger.children[0],
-
+		$burger = document.querySelector(".menu_opener"),
+		$menu = document.querySelector(".menu"),
+		wrapper = document.querySelector(".menu_wrapper"),
+		$burgerIcon = $burger.children[0],
+		isSafari = /constructor/i.test(window.HTMLElement),
 		menuOpen=false,
 		spacing=75;
+
+	if (isSafari) {
+		wrapper.style.filter= "none";
+		wrapper.style.webkitFilter = "none";
+	}
 
 	function open(){
 		TweenLite.to($burger,0.1,{

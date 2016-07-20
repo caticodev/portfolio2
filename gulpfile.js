@@ -26,6 +26,7 @@ var gulp = require('gulp'),
 	concat = require('gulp-concat'),
 	merge = require('merge2'),
 	runSequence = require('run-sequence'),
+	addsrc = require('gulp-add-src'),
 	plumber = require('gulp-plumber');
 
 
@@ -41,7 +42,7 @@ gulp.task('styles', function(){
 		.pipe(concat('style.scss'))					// concat to one file
 		.pipe(sass())											// convert sass to css
 		// .pipe(csslint())									// check for errors
-  //   .pipe(csslint.reporter())											
+  //   .pipe(csslint.reporter())										
 		.pipe(gulp.dest('.temp'))
 		// .pipe(uncss('index.html'))				// remove unused css
 		.pipe(autoprefixer())							// add prefixes

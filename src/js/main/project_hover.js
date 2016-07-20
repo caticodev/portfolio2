@@ -20,19 +20,14 @@
 		[].slice.call(document.querySelectorAll('.proj li')).forEach(function (el) {
 			
 				el.addEventListener('mouseenter', function (ev) {
+					console.log('enter');
 					el.className ='in-' + getDirection(ev, this);
-					// animateEls(el);
 				});
 
 				el.addEventListener('mouseleave', function (ev) {
+					console.log('leave');
 					el.className ='out-' + getDirection(ev, this);
 				});
 			
 		});
-
-		// function animateEls(el){
-		// 	TweenMax.staggerFrom(el.children[1].children[2].children, 0.5, 
-		// 		{x: 135, ease: Back.easeOut.config(15), delay: 0.3}, 0.2);
-		// }
-	// }
 }());

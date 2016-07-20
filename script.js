@@ -8335,7 +8335,7 @@ function shuffle(a){
 	}
 
 // loading
-	window.addEventListener('load', function(){
+	window.addEventListener('DOMContentLoaded', function(){
 		var loader = document.querySelector('.loader'),
 			circle = document.querySelector('.loader_circle'),
 			img = document.querySelector('.loader_img'),
@@ -8413,12 +8413,18 @@ function shuffle(a){
 }());
 (function(){
 	var $menuBtn = [].slice.call(document.querySelectorAll(".menu_btn")),
-			$burger = document.querySelector(".menu_opener"),
-			$menu = document.querySelector(".menu"),
-			$burgerIcon = $burger.children[0],
-
+		$burger = document.querySelector(".menu_opener"),
+		$menu = document.querySelector(".menu"),
+		wrapper = document.querySelector(".menu_wrapper"),
+		$burgerIcon = $burger.children[0],
+		isSafari = /constructor/i.test(window.HTMLElement),
 		menuOpen=false,
 		spacing=75;
+
+	if (isSafari) {
+		wrapper.style.filter= "none";
+		wrapper.style.webkitFilter = "none";
+	}
 
 	function open(){
 		TweenLite.to($burger,0.1,{
@@ -8521,19 +8527,14 @@ function shuffle(a){
 		[].slice.call(document.querySelectorAll('.proj li')).forEach(function (el) {
 			
 				el.addEventListener('mouseenter', function (ev) {
+					console.log('enter');
 					el.className ='in-' + getDirection(ev, this);
-					// animateEls(el);
 				});
 
 				el.addEventListener('mouseleave', function (ev) {
+					console.log('leave');
 					el.className ='out-' + getDirection(ev, this);
 				});
 			
 		});
-
-		// function animateEls(el){
-		// 	TweenMax.staggerFrom(el.children[1].children[2].children, 0.5, 
-		// 		{x: 135, ease: Back.easeOut.config(15), delay: 0.3}, 0.2);
-		// }
-	// }
 }());

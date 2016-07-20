@@ -30,7 +30,7 @@
 	}
 
 // loading
-	window.addEventListener('load', function(){
+	window.addEventListener('DOMContentLoaded', function(){
 		var loader = document.querySelector('.loader'),
 			circle = document.querySelector('.loader_circle'),
 			img = document.querySelector('.loader_img'),
