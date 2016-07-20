@@ -81,7 +81,7 @@ gulp.task('scripts', function(){
 });
 
 gulp.task('views', function(){
-	return gulp.src('src/views/*.pug')
+	return gulp.src('src/views/index.pug')
 		.pipe(plumber({
 			errorHandler: function (err) {
         console.log(err);
@@ -123,7 +123,7 @@ gulp.task('watch', function(){
 });
 
 gulp.task('clean', function() {
-  return del.sync(['dist', '.temp']);
+  return del.sync(['dist', '.temp', 'img']);
 })
 
 gulp.task('build', function (callback) {

@@ -87,18 +87,6 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-
-		&:after{
-			content: '';
-			display: block;
-			position: absolute;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background: $intro-bg;
-			opacity: 0.9;
-		}
 	}
 
 	&_bgImg{
@@ -106,10 +94,10 @@
 		width: 100%;
 		height: 100%;
 		backface-visibility: hidden;
-		background: url('img/bridge.jpg') 50% 100% / cover no-repeat;
+		background: url('img/bridge.png') 50% 100% / cover no-repeat;
 
 		&.top{
-			opacity: 0.7;
+			opacity: 0.6;
 			position: absolute;
 		}
 	}

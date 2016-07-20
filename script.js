@@ -7834,7 +7834,7 @@ function shuffle(a){
     a[i - 1] = a[j];
     a[j] = x;
   }
-};
+}
 ;(function(window, document, undefined){
 
 	'use strict';
@@ -8020,7 +8020,7 @@ function shuffle(a){
 	function validate(){
 		for (var i=0; i<fields.length; i++){
 			input = fields[i].value.trim();
-			msg = document.querySelector('.contact_error[data-name="'+fields[i].name+'"');
+			msg = document.querySelector('.contact_error[data-name="'+fields[i].name+'"]');
 			if (input === '' || (i===1 && !email(input))){
 				msg.classList.add('show');
 				break;

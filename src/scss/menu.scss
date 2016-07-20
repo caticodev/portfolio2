@@ -135,3 +135,9 @@ $item-size: $menu-size - 20px;
   	}
   }
 }
+
+@media screen and (min-color-index:0) and (-webkit-min-device-pixel-ratio:0) { 
+  .menu_wrapper { 
+    filter: none;
+  }
+}
