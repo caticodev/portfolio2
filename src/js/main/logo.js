@@ -6,17 +6,17 @@
 		rotate, logo, wrapper, svg, shapes, left, right, paths, interval;
 
 	function Logo(){
-		logo = document.querySelector('.logo.desktop');
-		wrapper = document.querySelector('.logo.desktop .logo_wrapper');
-		svg = document.querySelector('.logo.desktop svg');
-		shapes = [].slice.call(document.querySelectorAll('.logo.desktop .shape'));
-		left = [].slice.call(document.querySelectorAll('.logo.desktop .left .shape'));
-		right = [].slice.call(document.querySelectorAll('.logo.desktop .right .shape'));
-		paths = [].slice.call(document.querySelectorAll('.shape path'));
+		logo = document.querySelector('.logo');
+		wrapper = document.querySelector('.logo_wrapper');
+		svg = document.querySelector('.logo svg');
+		shapes = [].slice.call(document.querySelectorAll('.logo .shape'));
+		left = [].slice.call(document.querySelectorAll('.logo .left .shape'));
+		right = [].slice.call(document.querySelectorAll('.logo .right .shape'));
+		paths = [].slice.call(document.querySelectorAll('.logo .shape path'));
 
 		this.intro = this.intro.bind(this);
 		this.resize = this.resize.bind(this);
-		onResize = onResize.bind(this);
+		this.clearProps = this.clearProps.bind(this);
 	}
 
 	var rand = function() {
@@ -42,14 +42,9 @@
 		clearInterval(interval);
 	};
 
-	function onResize(){
-	
+	Logo.prototype.resize = function(){
 		this.scale = new TimelineLite({paused: true, 
-			onReverseComplete: function(){
-				TweenLite.set(logo, {clearProps: 'all'});
-				TweenLite.set(wrapper, {clearProps: 'all'});
-				TweenLite.set(svg, {clearProps: 'all'});
-		}});
+			onReverseComplete: this.clearProps });
 
 		this.scale
 			.to(logo, 0.8,
@@ -61,10 +56,14 @@
 			.to(svg, 0.8, 
 				{width: 80, height: 80, fill: 'white', stroke: 'white', strokeOpacity: '0.9'}, 
 				0);
-	}
+		
+	};
 
-	Logo.prototype.resize = function(){
-		onResize();
+	Logo.prototype.clearProps = function(){
+		if (this.scale) this.scale.kill();
+		TweenLite.set(logo, {clearProps: 'all'});
+		TweenLite.set(wrapper, {clearProps: 'all'});
+		TweenLite.set(svg, {clearProps: 'all'});
 	};
 
 	function animTriangles(){
@@ -99,7 +98,14 @@
 
 	Logo.prototype.intro = function(){
 		shuffle(paths);
-		TweenMax.staggerFrom(paths, 0.3, {opacity: 0, ease: Circ.easeIn }, 0.01);
+		TweenLite.set(logo, {className: '+=main'});
+		TweenLite.set(paths, {opacity: 1});
+		TweenMax.staggerFrom(paths, 0.5, {opacity: 0, ease: Back.easeIn }, 0.01);
+	};
+
+	Logo.prototype.loading = function(){
+		shuffle(paths);
+		TweenMax.staggerTo(paths, 0.3, {opacity: 1, ease: Circ.easeIn, yoyo: true, repeat: -1}, 0.03);
 	};
 
 	window['Logo'] = Logo;

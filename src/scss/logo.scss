@@ -1,91 +1,90 @@
 .logo{
 	position: absolute;
-	z-index: 1;
+	z-index: 4;
 	width: 100%;
 	height: 90%;
 
-	&.mobile{
-		display: none;
-	}
-
 	&_wrapper{
 		position: absolute;
-		top: 15%;
-		// top: 13.5vh;
 		left: 50%;
-		transform: translateX(-50%);
-
-		&:hover{
-			padding: 0 50%;
-		}
+		top: 50%;
+		transform: translate(-50%, -50%);
 	}
 
 	svg{
-		width: 41vh;
-		height: 41vh;
 		overflow: visible;
-		fill: url(.#g443);
-		stroke: url(.#g443);
-		transition: fill .3s ease;
 		stroke-opacity: 0.3;
+		width: 100px;
+		height: 100px;
+		fill: $bg;
+		stroke: $bg;
 	}
 
 	path{
+		opacity: 0;
+	}
 
-		&.black{
-			fill-opacity: 0.9;
-		}
+	.black{
+		fill-opacity: 0.9;
+	}
 
-		&.white{
-			fill-opacity: 0.03;
-			stroke-opacity: 0;
-		}
+	.white{
+		fill-opacity: 0.03;
+		stroke-opacity: 0;
+	}
 
-		&.gray-dark{
-			fill-opacity: 0.3;
-			stroke-opacity: 0;
-		}
+	.gray-dark{
+		fill-opacity: 0.3;
+		stroke-opacity: 0;
+	}
 
-		&.gray-light{
-			fill-opacity: 0.1;
-			stroke-opacity: 0;
-		}
-
-		&.red{
-			fill: #db6262;
-			fill-opacity: 0.15;
-			stroke-opacity: 0;
-		}
+	.gray-light{
+		fill-opacity: 0.1;
+		stroke-opacity: 0;
 	}
 
 	svg, svg * {
 		pointer-events: none;
 	}
+
+	&.main{
+
+		.logo_wrapper{
+		top: 15%;
+		transform: translateX(-50%);
+
+			&:hover{
+				padding: 0 50%;
+			}
+		}
+
+		svg{
+			width: 41vh;
+			height: 41vh;
+			fill: url(.#g443);
+			stroke: url(.#g443);
+		}
+	}
 }
 
 @media screen and (max-width: $mobile), screen and (max-height: $minHeight){
-	.logo{
+	.logo.main{
 		width: auto;
 		height: auto;
 		top: 15%;
-		left: 50%;
-		display: none;
-
-		&.mobile{
-			display: block;
-		}
+		position: relative;
 
 		&_wrapper{
 			top: 10%;
+
+			&:hover{
+				padding: 0;
+			}
 		}
 
 		svg{
 			min-height: 200px;
 			min-width: 200px;
-		}
-
-		&.small{
-			opacity: 0.2;
 		}
 	}
 }

@@ -7823,7 +7823,8 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 		_tickerActive = false; //ensures that the first official animation forces a ticker.tick() to update the time when it is instantiated
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
-var mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false),
+var width, height, mobile,
+	inputFocus = false,
 	currentSec = 0;
 
 function shuffle(a){
@@ -7835,6 +7836,9 @@ function shuffle(a){
     a[j] = x;
   }
 }
+
+var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+
 ;(function(window, document, undefined){
 
 	'use strict';
@@ -7844,6 +7848,7 @@ function shuffle(a){
 		menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
 		introLink = document.querySelector('.intro_link'),
 		logoLink = document.querySelector('.logo_wrapper'),
+
 		animationTime = 1000,
 		lastScroll = 0, index = 0, quietPeriod = 100, start;
 
@@ -7870,8 +7875,8 @@ function shuffle(a){
 			menuBtns[j].classList.remove('active');
 		}
 		for (var i=0; i<menuBtns.length; i++){
-			if (i===3) { menuBtns[i].classList.add('active'); break; }
-			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop) {
+			if (i===3) { menuBtns[i].classList.add('active'); currentSec = i; break; }
+			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop - height/2) {
 				menuBtns[i].classList.add('active');
 				currentSec = i;
 				break;
@@ -7929,7 +7934,8 @@ function shuffle(a){
 
 	var scrollDown = function(no){
 		this.fn["leaveSec"+currentSec]();
-		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
+		// TweenLite.to(container, 1, {y: -100*no + '%', ease: Circ.easeOut});
+		TweenLite.to(container, 1, {transform: 'translateY('+ -100*no + 'vh)', ease: Circ.easeOut});
 		for (var i=0; i<menuBtns.length; i++){
 			i === no ? menuBtns[i].classList.add('active') : menuBtns[i].classList.remove('active');
 		}
@@ -7950,7 +7956,7 @@ function shuffle(a){
 	AutoScroll.prototype.enableDesktop = function(){
 		wrapper.removeEventListener('scroll', mobileBtns);
 		wrapper.scrollTop = 0;
-		TweenLite.set(container, {y: -100*currentSec + '%'});
+		TweenLite.set(container, {transform: 'translateY('+ -100*currentSec + 'vh)', ease: Circ.easeOut});
 		document.addEventListener('mousewheel', onScroll);
 		document.addEventListener('DOMMouseScroll', onScroll);
 		document.addEventListener("touchstart",  onTouch);
@@ -7970,10 +7976,12 @@ function shuffle(a){
 	});
 
 	function onInputFocus(ev) {
+		inputFocus = true;
 		ev.target.parentNode.classList.add('filled');
 	}
 
 	function onInputBlur(ev) {
+		inputFocus = false;
 		if(ev.target.value.trim() === '') {
 			ev.target.parentNode.classList.remove('filled');
 		}
@@ -8204,17 +8212,17 @@ function shuffle(a){
 		rotate, logo, wrapper, svg, shapes, left, right, paths, interval;
 
 	function Logo(){
-		logo = document.querySelector('.logo.desktop');
-		wrapper = document.querySelector('.logo.desktop .logo_wrapper');
-		svg = document.querySelector('.logo.desktop svg');
-		shapes = [].slice.call(document.querySelectorAll('.logo.desktop .shape'));
-		left = [].slice.call(document.querySelectorAll('.logo.desktop .left .shape'));
-		right = [].slice.call(document.querySelectorAll('.logo.desktop .right .shape'));
-		paths = [].slice.call(document.querySelectorAll('.shape path'));
+		logo = document.querySelector('.logo');
+		wrapper = document.querySelector('.logo_wrapper');
+		svg = document.querySelector('.logo svg');
+		shapes = [].slice.call(document.querySelectorAll('.logo .shape'));
+		left = [].slice.call(document.querySelectorAll('.logo .left .shape'));
+		right = [].slice.call(document.querySelectorAll('.logo .right .shape'));
+		paths = [].slice.call(document.querySelectorAll('.logo .shape path'));
 
 		this.intro = this.intro.bind(this);
 		this.resize = this.resize.bind(this);
-		onResize = onResize.bind(this);
+		this.clearProps = this.clearProps.bind(this);
 	}
 
 	var rand = function() {
@@ -8240,14 +8248,9 @@ function shuffle(a){
 		clearInterval(interval);
 	};
 
-	function onResize(){
-	
+	Logo.prototype.resize = function(){
 		this.scale = new TimelineLite({paused: true, 
-			onReverseComplete: function(){
-				TweenLite.set(logo, {clearProps: 'all'});
-				TweenLite.set(wrapper, {clearProps: 'all'});
-				TweenLite.set(svg, {clearProps: 'all'});
-		}});
+			onReverseComplete: this.clearProps });
 
 		this.scale
 			.to(logo, 0.8,
@@ -8259,10 +8262,14 @@ function shuffle(a){
 			.to(svg, 0.8, 
 				{width: 80, height: 80, fill: 'white', stroke: 'white', strokeOpacity: '0.9'}, 
 				0);
-	}
+		
+	};
 
-	Logo.prototype.resize = function(){
-		onResize();
+	Logo.prototype.clearProps = function(){
+		if (this.scale) this.scale.kill();
+		TweenLite.set(logo, {clearProps: 'all'});
+		TweenLite.set(wrapper, {clearProps: 'all'});
+		TweenLite.set(svg, {clearProps: 'all'});
 	};
 
 	function animTriangles(){
@@ -8297,35 +8304,65 @@ function shuffle(a){
 
 	Logo.prototype.intro = function(){
 		shuffle(paths);
-		TweenMax.staggerFrom(paths, 0.3, {opacity: 0, ease: Circ.easeIn }, 0.01);
+		TweenLite.set(logo, {className: '+=main'});
+		TweenLite.set(paths, {opacity: 1});
+		TweenMax.staggerFrom(paths, 0.5, {opacity: 0, ease: Back.easeIn }, 0.01);
+	};
+
+	Logo.prototype.loading = function(){
+		shuffle(paths);
+		TweenMax.staggerTo(paths, 0.3, {opacity: 1, ease: Circ.easeIn, yoyo: true, repeat: -1}, 0.03);
 	};
 
 	window['Logo'] = Logo;
 
 })(window, document);
 (function() {
+	var logo = new Logo();
+	logo.loading();
+
+// loading
+	window.addEventListener('DOMContentLoaded', function(){
+		var loader = document.querySelector('.loader'),
+			circle = document.querySelector('.loader_circle'),
+			menu = document.querySelector('.menu_wrapper'),
+			img = document.querySelector('.loader_img'),
+			start = new TimelineMax()
+			
+		start
+			.to(circle, 0.5, {scale: 0, ease: Expo.easeOut, delay: 2})
+			.set(loader, {display: 'none'})
+			.set(menu, {zIndex: 5})
+			.addCallback(logo.intro, 2)
+			.addCallback(animIntro, 2)
+			.addCallback(onResize, 2)		
+	});
+//
+
 	var fn = {},
-		logo = new Logo(),
 		iconspar = new Icons(),
 		scroll = new AutoScroll(fn)
 		imgTilt = new ImgTilt();
 	
-	logo.enableHover();
-	logo.resize();
 	imgTilt.enable();
-	if (mobile) iconspar.enable();
 	
 	window.addEventListener('resize', onResize);
 
-	function onResize(){
-		mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
-		
+	function onResize(ev){
+		width = window.innerWidth;
+		height = window.innerHeight;
+		mobile = (width < 769 || height < 601) ? true : false;
+
 		imgTilt.resize();
 		if (mobile) {
-			scroll.enableMobile();
+			if (!inputFocus) scroll.enableMobile();
+			logo.disableHover();
+			iconspar.enable();
+			logo.clearProps();
 		} else {
 			scroll.enableDesktop();
 			logo.resize();
+			logo.enableHover();
 			if (currentSec === 0){
 				logo.scale.reverse();
 			} else {
@@ -8333,24 +8370,6 @@ function shuffle(a){
 			}
 		}
 	}
-
-// loading
-	window.addEventListener('DOMContentLoaded', function(){
-		var loader = document.querySelector('.loader'),
-			circle = document.querySelector('.loader_circle'),
-			img = document.querySelector('.loader_img'),
-			start = new TimelineMax();
-
-		start
-			.set(img, {display: 'none', delay: 2})
-			.to(circle, 0.5, {scale: 0, ease: Expo.easeOut})
-			.set(loader, {display: 'none'})
-			.addCallback(logo.intro, 2)
-			.addCallback(animIntro, 2)
-
-		onResize();
-	});
-//
 
 // section specific animations
 	var projects = [].slice.call(document.querySelectorAll('.proj_list li')),
@@ -8506,7 +8525,18 @@ function shuffle(a){
 	
 }());
 (function() {
-	// if (!mobile){
+	var projects = [].slice.call(document.querySelectorAll('.proj li'));
+
+	if (iOS){
+		var prev = projects[0];
+		projects.forEach(function (el) {
+			el.addEventListener('click', function (ev) {
+				prev.classList.remove('hover');
+				el.classList.add('hover');
+				prev = el;
+			});
+		});
+	} else {
 		var getDirection = function (ev, obj) {
 			var x = ev.pageX,
 					y = ev.pageY,
@@ -8524,17 +8554,15 @@ function shuffle(a){
 			return Object.keys(val).reduce(function(a, b){ return val[a] < val[b] ? a : b; });
 		};
 
-		[].slice.call(document.querySelectorAll('.proj li')).forEach(function (el) {
+		projects.forEach(function (el) {
 			
 				el.addEventListener('mouseenter', function (ev) {
-					console.log('enter');
 					el.className ='in-' + getDirection(ev, this);
 				});
 
 				el.addEventListener('mouseleave', function (ev) {
-					console.log('leave');
 					el.className ='out-' + getDirection(ev, this);
 				});
-			
 		});
+	}
 }());

@@ -1,4 +1,5 @@
-var mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false),
+var width, height, mobile,
+	inputFocus = false,
 	currentSec = 0;
 
 function shuffle(a){
@@ -10,3 +11,5 @@ function shuffle(a){
     a[j] = x;
   }
 }
+
+var iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);

@@ -18,6 +18,7 @@
     "gulp-csslint": "^0.3.1",
     "gulp-csso": "^2.0.0",
     "gulp-fixmyjs": "^1.0.2",
+    "gulp-htmlmin": "^2.0.0",
     "gulp-imagemin": "^3.0.1",
     "gulp-jshint": "^2.0.1",
     "gulp-newer": "^1.2.0",

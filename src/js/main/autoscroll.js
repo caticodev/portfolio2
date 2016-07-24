@@ -7,6 +7,7 @@
 		menuBtns = [].slice.call(document.querySelectorAll('.menu_btn')),
 		introLink = document.querySelector('.intro_link'),
 		logoLink = document.querySelector('.logo_wrapper'),
+
 		animationTime = 1000,
 		lastScroll = 0, index = 0, quietPeriod = 100, start;
 
@@ -33,8 +34,8 @@
 			menuBtns[j].classList.remove('active');
 		}
 		for (var i=0; i<menuBtns.length; i++){
-			if (i===3) { menuBtns[i].classList.add('active'); break; }
-			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop) {
+			if (i===3) { menuBtns[i].classList.add('active'); currentSec = i; break; }
+			if (wrapper.scrollTop < document.querySelector(menuBtns[i+1].getAttribute('href')).offsetTop - height/2) {
 				menuBtns[i].classList.add('active');
 				currentSec = i;
 				break;
@@ -92,7 +93,8 @@
 
 	var scrollDown = function(no){
 		this.fn["leaveSec"+currentSec]();
-		TweenLite.to(container, 1, {y: -100*no + '%', ease:Circ.easeOut});
+		// TweenLite.to(container, 1, {y: -100*no + '%', ease: Circ.easeOut});
+		TweenLite.to(container, 1, {transform: 'translateY('+ -100*no + 'vh)', ease: Circ.easeOut});
 		for (var i=0; i<menuBtns.length; i++){
 			i === no ? menuBtns[i].classList.add('active') : menuBtns[i].classList.remove('active');
 		}
@@ -113,7 +115,7 @@
 	AutoScroll.prototype.enableDesktop = function(){
 		wrapper.removeEventListener('scroll', mobileBtns);
 		wrapper.scrollTop = 0;
-		TweenLite.set(container, {y: -100*currentSec + '%'});
+		TweenLite.set(container, {transform: 'translateY('+ -100*currentSec + 'vh)', ease: Circ.easeOut});
 		document.addEventListener('mousewheel', onScroll);
 		document.addEventListener('DOMMouseScroll', onScroll);
 		document.addEventListener("touchstart",  onTouch);

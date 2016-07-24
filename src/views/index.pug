@@ -10,17 +10,13 @@ html(lang="en")
 		.loader
 			.loader_bg
 				.loader_circle
-			img.loader_img(src='img/ball-triangle.svg')
 		include vectors.svg
 		.wrapper
 			include menu.pug
-			.logo.desktop
+			.logo
 				.logo_wrapper
 					include logo.svg
 			main.main
-				.logo.mobile
-					.logo_wrapper
-						include logo.svg
 				section.section.intro#sec0
 					.intro_bg
 						.intro_bgImg.base
@@ -28,24 +24,15 @@ html(lang="en")
 						.intro_bgImg.top
 					.intro_text
 						h1.intro_title Catico
-						//- .intro_border
 						.intro_subtitle full stack web development
 					a(href="#sec1").intro_link projects
 						.intro_arrows
-							//- svg.intro_arrow
-							//- 	use(xlink:href="#arrow")
-							//- svg.intro_arrow
-							//- 	use(xlink:href="#arrow")
-							//- svg.intro_arrow
-							//- 	use(xlink:href="#arrow")
 							.intro_arrow
 							.intro_arrow
 							.intro_arrow
 				section.section.proj#sec1
 					ul.proj_list
 						li
-							//- .proj_imgs
-							//- 	img(src='img/projects/calc.png')
 							.proj_img(style="background-image: url('img/projects/proj1.png')")
 							.proj_overlay
 								.proj_title Calculator
@@ -109,7 +96,6 @@ html(lang="en")
 								.double
 									img(src='img/projects/pom1.png', alt="Pomoro app - work")
 									img(src='img/projects/pom2.png', alt="Pomoro app - break")
-							//- .proj_img(style="background-image: url('img/projects/proj4.png')")
 							.proj_overlay
 								.proj_title Pomodoro
 								.proj_descr Pomodoro timer in Javascript.
@@ -169,15 +155,6 @@ html(lang="en")
 							li responsivity
 							li cross-browser compatibility
 							li mobile / desktop
-					//- .skills
-						//- h2.skills_title Skills
-						//- ul.skills_list
-						//- 	li design
-						//- 	li development
-						//- 	li ui / ux
-						//- 	li responsivity
-						//- 	li cross-browser compatibility
-						//- 	li mobile / desktop
 					.skills_right
 						ul.skills_icons.shadow
 							li.layer(data-level="0.5")

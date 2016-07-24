@@ -13,11 +13,11 @@ var gulp = require('gulp'),
 
 	//views
 	pug = require('gulp-pug'),
+	htmlmin = require('gulp-htmlmin')
 
 	//images
 	imagemin = require('gulp-imagemin'),
 	cache = require('gulp-cache'),
-	svgo = require('gulp-svgo'),
 
 	//other
 	bsync = require('browser-sync').create(),
@@ -27,6 +27,7 @@ var gulp = require('gulp'),
 	merge = require('merge2'),
 	runSequence = require('run-sequence'),
 	addsrc = require('gulp-add-src'),
+	path = require('path')
 	plumber = require('gulp-plumber');
 
 
@@ -91,6 +92,8 @@ gulp.task('views', function(){
 		}))
 		.pipe(newer('*.html'))
 		.pipe(pug({ pretty: true }))										
+		.pipe(gulp.dest('.temp'))
+		.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }))
 });

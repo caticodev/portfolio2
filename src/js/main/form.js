@@ -9,10 +9,12 @@
 	});
 
 	function onInputFocus(ev) {
+		inputFocus = true;
 		ev.target.parentNode.classList.add('filled');
 	}
 
 	function onInputBlur(ev) {
+		inputFocus = false;
 		if(ev.target.value.trim() === '') {
 			ev.target.parentNode.classList.remove('filled');
 		}

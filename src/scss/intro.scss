@@ -3,6 +3,7 @@
 	position: relative;
 	font-size: 100%;
 	min-height: 480px;
+	overflow: hidden;
 
 	&:after{
 		content: '';
@@ -37,7 +38,7 @@
 		left: 50%;
 		transform: translateX(-50%);
 		cursor: pointer;
-		z-index: 11;
+		// z-index: 11;
 		text-decoration: none;
 	}
 

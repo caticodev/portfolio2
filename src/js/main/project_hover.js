@@ -1,5 +1,16 @@
 (function() {
-	// if (!mobile){
+	var projects = [].slice.call(document.querySelectorAll('.proj li'));
+
+	if (iOS){
+		var prev = projects[0];
+		projects.forEach(function (el) {
+			el.addEventListener('click', function (ev) {
+				prev.classList.remove('hover');
+				el.classList.add('hover');
+				prev = el;
+			});
+		});
+	} else {
 		var getDirection = function (ev, obj) {
 			var x = ev.pageX,
 					y = ev.pageY,
@@ -17,17 +28,15 @@
 			return Object.keys(val).reduce(function(a, b){ return val[a] < val[b] ? a : b; });
 		};
 
-		[].slice.call(document.querySelectorAll('.proj li')).forEach(function (el) {
+		projects.forEach(function (el) {
 			
 				el.addEventListener('mouseenter', function (ev) {
-					console.log('enter');
 					el.className ='in-' + getDirection(ev, this);
 				});
 
 				el.addEventListener('mouseleave', function (ev) {
-					console.log('leave');
 					el.className ='out-' + getDirection(ev, this);
 				});
-			
 		});
+	}
 }());

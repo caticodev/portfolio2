@@ -1,26 +1,49 @@
 (function() {
+	var logo = new Logo();
+	logo.loading();
+
+// loading
+	window.addEventListener('DOMContentLoaded', function(){
+		var loader = document.querySelector('.loader'),
+			circle = document.querySelector('.loader_circle'),
+			menu = document.querySelector('.menu_wrapper'),
+			img = document.querySelector('.loader_img'),
+			start = new TimelineMax()
+			
+		start
+			.to(circle, 0.5, {scale: 0, ease: Expo.easeOut, delay: 2})
+			.set(loader, {display: 'none'})
+			.set(menu, {zIndex: 5})
+			.addCallback(logo.intro, 2)
+			.addCallback(animIntro, 2)
+			.addCallback(onResize, 2)		
+	});
+//
+
 	var fn = {},
-		logo = new Logo(),
 		iconspar = new Icons(),
 		scroll = new AutoScroll(fn)
 		imgTilt = new ImgTilt();
 	
-	logo.enableHover();
-	logo.resize();
 	imgTilt.enable();
-	if (mobile) iconspar.enable();
 	
 	window.addEventListener('resize', onResize);
 
-	function onResize(){
-		mobile = ((window.innerWidth < 701 || window.innerHeight < 601) ? true : false);
-		
+	function onResize(ev){
+		width = window.innerWidth;
+		height = window.innerHeight;
+		mobile = (width < 769 || height < 601) ? true : false;
+
 		imgTilt.resize();
 		if (mobile) {
-			scroll.enableMobile();
+			if (!inputFocus) scroll.enableMobile();
+			logo.disableHover();
+			iconspar.enable();
+			logo.clearProps();
 		} else {
 			scroll.enableDesktop();
 			logo.resize();
+			logo.enableHover();
 			if (currentSec === 0){
 				logo.scale.reverse();
 			} else {
@@ -28,24 +51,6 @@
 			}
 		}
 	}
-
-// loading
-	window.addEventListener('DOMContentLoaded', function(){
-		var loader = document.querySelector('.loader'),
-			circle = document.querySelector('.loader_circle'),
-			img = document.querySelector('.loader_img'),
-			start = new TimelineMax();
-
-		start
-			.set(img, {display: 'none', delay: 2})
-			.to(circle, 0.5, {scale: 0, ease: Expo.easeOut})
-			.set(loader, {display: 'none'})
-			.addCallback(logo.intro, 2)
-			.addCallback(animIntro, 2)
-
-		onResize();
-	});
-//
 
 // section specific animations
 	var projects = [].slice.call(document.querySelectorAll('.proj_list li')),
