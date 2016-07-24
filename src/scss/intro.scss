@@ -38,7 +38,6 @@
 		left: 50%;
 		transform: translateX(-50%);
 		cursor: pointer;
-		// z-index: 11;
 		text-decoration: none;
 	}
 
@@ -63,9 +62,9 @@
 		height: 10px;
 		transform: translateZ(0.01);
 		backface-visibility: hidden;
-		background: url('img/arrow.png');
-		// opacity: 0;
-		// animation: arrow 1s infinite;
+		background: url('img/arrow.svg');
+		opacity: 0;
+		animation: arrow 1s infinite;
 
 		svg{
 			max-width: 100%;
@@ -120,9 +119,5 @@
 	.intro{
 		height: 100%;
 		font-size: 13px;
-
-		&_text{
-			// top: 55%;
-		}
 	}
 }

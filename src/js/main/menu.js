@@ -32,7 +32,6 @@
 			}
 		});
 		$menuBtn.forEach(function(el, i){
-			// var dist=Math.abs(i+1);
 			el.style.cssText = "z-index:"+(1-i);
 			TweenLite.to(el,1.1*(i+1),{
 				x:(i+1)*spacing,

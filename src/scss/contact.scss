@@ -1,8 +1,6 @@
 .contact{
-	// background: $contact-bg;
 	background: linear-gradient(to bottom, #002f2f 0%,#2e2e27 100%);
 	padding: 100px 20px 50px;
-	// padding: 14.6vh 20px 0;
 	position: relative;
 
 	&_overlay{
@@ -11,7 +9,6 @@
 		width: 100%;
 		font-size: 50px;
 		padding: 150px 40px 0;
-		// padding: 22vh 40px 0;
 		font-weight: 200;
 		opacity: 0;
 		transition: opacity 1s ease-out;
@@ -41,7 +38,6 @@
 		color: $contact-title;
 		font-family: 'Wire One';
 		font-size: 100px;
-		// font-size: 15vh;
 		margin-bottom: 8vh;
 	}
 
@@ -51,7 +47,6 @@
 		position: relative;
 		max-width: 400px;
 		min-height: 400px;
-		// margin: 0 auto;
 
 		&.done{
 
@@ -86,9 +81,7 @@
 		z-index: 1;
 		display: inline-block;
 		margin: 1.1em;
-		// margin: 3.3vh 1.1em;
 		max-width: 350px;
-		// max-width: 25.5vw;
 		width: calc(100% - 2em);
 		vertical-align: top;
 		transition: opacity 1s ease-out;
@@ -100,7 +93,6 @@
 		display: block;
 		float: right;
 		padding: 0.8em;
-		// padding: 2.35vh 0.8em;
 		border: none;
 		border-radius: 0;
 		font-family: 'Raleway';
@@ -133,7 +125,6 @@
 		position: relative;
 		display: block;
 		padding: 0.8em;
-		// padding: 2.35vh;
 		width: 100%;
 		transform-origin: 0% 50%;
 		transition: transform 0.3s;
@@ -150,7 +141,6 @@
 		height: 100%;
 
 		stroke: $contact-border;
-		// stroke-width: 5px;
 		stroke-width: 4px;
 		stroke-dasharray: 960;
 		stroke-dashoffset: 558;
@@ -218,7 +208,6 @@
 	&_msg{
 		resize: none;
 		height: 200px;
-		// height: 29vh;
 		transition: max-height .3s;
 	}
 
@@ -248,7 +237,6 @@
 
 		.contact_labelName {
 			transform: scale3d(0.81, 0.81, 1) translate3d(-0.8em, -3em, 0);
-			// transform: scale3d(0.81, 0.81, 1) translate3d(-2.35vh, -7.5vh, 0);
 			color: $contact-hover;
 		}
 
