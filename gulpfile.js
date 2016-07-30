@@ -3,21 +3,14 @@ var gulp = require('gulp'),
 	sass = require('gulp-sass'),
 	csso = require('gulp-csso'),
 	autoprefixer = require('gulp-autoprefixer'),
-	uncss = require('gulp-uncss'),
-	csslint = require('gulp-csslint'),
 
 	//scripts
-	fixmyjs = require("gulp-fixmyjs"),
 	uglify = require('gulp-uglify'),
 	jshint = require('gulp-jshint'),
 
 	//views
 	pug = require('gulp-pug'),
 	htmlmin = require('gulp-htmlmin')
-
-	//images
-	imagemin = require('gulp-imagemin'),
-	cache = require('gulp-cache'),
 
 	//other
 	bsync = require('browser-sync').create(),
@@ -26,8 +19,6 @@ var gulp = require('gulp'),
 	concat = require('gulp-concat'),
 	merge = require('merge2'),
 	runSequence = require('run-sequence'),
-	addsrc = require('gulp-add-src'),
-	path = require('path')
 	plumber = require('gulp-plumber');
 
 
@@ -40,25 +31,20 @@ gulp.task('styles', function(){
     	}
 		}))
 		.pipe(newer('*.css'))
-		.pipe(concat('style.scss'))					// concat to one file
-		.pipe(sass())											// convert sass to css
-		// .pipe(csslint())									// check for errors
-  //   .pipe(csslint.reporter())										
+		.pipe(concat('style.scss'))					
+		.pipe(sass())									
 		.pipe(gulp.dest('.temp'))
-		// .pipe(uncss('index.html'))				// remove unused css
-		.pipe(autoprefixer())							// add prefixes
-		.pipe(csso())											// minify
+		.pipe(autoprefixer())							
+		.pipe(csso())											
 		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }))
 });
 
 gulp.task('scripts', function(){
 	var plugins =	gulp.src(['src/js/plugins/*.js', '!src/js/plugins/_*.js'])
-			// .pipe(newer('.temp/plugins.js'))
 			.pipe(concat('plugins.js'));
 
 	var main = gulp.src(['src/js/main/*.js', '!src/js/main/_*.js'])
-			// .pipe(newer('.temp/main.js'))
 			.pipe(jshint())
 			.pipe(jshint.reporter('default'))
 			.pipe(concat('main.js'))
@@ -71,8 +57,7 @@ gulp.task('scripts', function(){
     	}
 		}))
 		.pipe(concat('script.js'))					
-		// .pipe(fixmyjs())
-		// .pipe(uglify())										
+		.pipe(uglify())										
 		.pipe(gulp.dest('./'))
 		.pipe(bsync.reload({ stream: true }));
 
@@ -106,8 +91,6 @@ gulp.task('images', function(){
     	  this.emit('end');
     	}
 		}))
-	  // .pipe(cache(imagemin({ interlaced: true })))
-	  // .pipe(svgo())
 	  .pipe(gulp.dest('img'))
 	  .pipe(bsync.reload({ stream: true }))
 });

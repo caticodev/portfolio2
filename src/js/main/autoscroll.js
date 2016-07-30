@@ -93,7 +93,6 @@
 
 	var scrollDown = function(no){
 		this.fn["leaveSec"+currentSec]();
-		// TweenLite.to(container, 1, {y: -100*no + '%', ease: Circ.easeOut});
 		TweenLite.to(container, 1, {transform: 'translateY('+ -100*no + 'vh)', ease: Circ.easeOut});
 		for (var i=0; i<menuBtns.length; i++){
 			i === no ? menuBtns[i].classList.add('active') : menuBtns[i].classList.remove('active');
