@@ -60,11 +60,8 @@
 	&_arrow{
 		width: 20px;
 		height: 10px;
-		transform: translateZ(0.01);
 		backface-visibility: hidden;
 		background: url('img/arrow.svg');
-		// opacity: 0;
-		// animation: arrow 1s infinite;
 
 		svg{
 			max-width: 100%;
@@ -100,18 +97,6 @@
 			opacity: 0.6;
 			position: absolute;
 		}
-	}
-}
-
-@keyframes arrow {
-	0% {
-		opacity: 0
-	}
-	50% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
 	}
 }
 
